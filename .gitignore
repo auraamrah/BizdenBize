@@ -3,4 +3,6 @@
 /api
 /.venv
 /labels
-/models
+/models/*
+!/models/fire_lgbm_turkiye.joblib
+!/models/metrics_turkiye.csv
