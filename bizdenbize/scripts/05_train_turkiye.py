@@ -1,24 +1,24 @@
 """FireBridge — Tahap 2-4 for the whole of Türkiye: features, LightGBM, evaluation, dashboard export.
 
-Same method as main.ipynb (pilot Antalya-Muğla), scaled to ~31k land cells x 1,528 days (~47M cell-days):
-  * weather features are kept per FWI grid point ([day, point] arrays) and gathered per cell on demand,
-    so the full cell-day table is never held in memory;
-  * training uses every fire cell-day + a random NEG_RATE share of non-fire cell-days, with the sampled
-    negatives weighted 1/NEG_RATE (equivalent in expectation to training on all rows);
+Same method as main.ipynb (pilot Antalya-Muğla), scaled to ~33k land cells x ~1,500 days:
+  * weather features are kept per FWI grid point ([day, point] arrays) and gathered per cell on demand;
+  * labels are *wildfire* cell-days (fire_pos_wild.csv); hotspot cell-days that look like agricultural
+    burning are dropped from training and evaluation instead of being counted as "no fire";
+  * training uses every fire cell-day + a random NEG_RATE share of non-fire cell-days, weighted 1/NEG_RATE;
   * evaluation uses every land cell-day of the held-out year.
-Splits as in the pilot: tune on train 2021-23 / val 2024, test 2025 (train 2021-24),
-hindcast 2021 (train 2022-25) — the hindcast model drives the 27 Jul - 2 Aug 2021 dashboard week.
+Splits: tune on train 2021-23 / val 2024, test 2025 (train 2021-24), hindcast 2021 (train 2022-25,
+drives the 27 Jul - 2 Aug 2021 dashboard week), and a final live model trained on 2021-2025.
 
-Inputs : data/turkiye/{cells,static_human,static_landcover,fire_pos}.csv  (04_grid_labels_turkiye.py)
-         data/turkiye/fwi_tr_<year>.grib                                   (03_fwi_turkiye.py)
-Outputs: models/fire_lgbm_turkiye.joblib, models/metrics_turkiye.csv,
-         bizdenbize/dashboard/data.json (pilot version kept as data.pilot.json)
+Usage: python 05_train_turkiye.py [--no-history] [--export]
+  --no-history  drop the hist_cell / hist_nb features
+  --export      write models/fire_lgbm_turkiye.joblib and bizdenbize/dashboard/data.json
+Metrics always go to models/metrics_turkiye_<variant>.csv.
 """
+import argparse
 import json
 import shutil
 import sys
 import time
-from pathlib import Path
 
 import geopandas as gpd
 import joblib
@@ -27,8 +27,6 @@ import numpy as np
 import pandas as pd
 import shapely
 import xarray as xr
-from scipy.ndimage import convolve
-from scipy.spatial import cKDTree
 from shapely.geometry import box
 from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LogisticRegression
@@ -36,16 +34,23 @@ from sklearn.metrics import average_precision_score, precision_recall_curve, roc
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 
-ROOT = Path(__file__).resolve().parents[2]
-DATA, TRD = ROOT / "data", ROOT / "data" / "turkiye"
-ZIP = DATA / "turkey-latest-free.shp.zip"
-LON0, LAT0, LON1, LAT1, CELL = 25.5, 35.8, 44.9, 42.3, 0.05
-NCOLS, NROWS = int(round((LON1 - LON0) / CELL)), int(round((LAT1 - LAT0) / CELL))
-PILOT = (27.2, 36.0, 32.4, 37.7)
+import firebridge_core as fb
+from firebridge_core import CELL, LAT0, LAT1, LON0, LON1, NCOLS, NROWS, PILOT, ROOT, TRD
+
+ap = argparse.ArgumentParser()
+ap.add_argument("--no-history", action="store_true")
+ap.add_argument("--export", action="store_true")
+ARGS = ap.parse_args()
+USE_HIST = not ARGS.no_history
+VARIANT = "hist" if USE_HIST else "nohist"
+FEATURES, GROUPS = fb.features_list(USE_HIST), fb.groups(USE_HIST)
 NEG_RATE = 0.05
 RNG = np.random.default_rng(0)
 T0 = time.time()
 sys.stdout.reconfigure(encoding="utf-8")       # region names (Muğla) on a Windows console
+import warnings
+warnings.filterwarnings("ignore", category=FutureWarning)
+warnings.filterwarnings("ignore", message=".*eval_set.*")
 
 
 def log(*a):
@@ -53,91 +58,57 @@ def log(*a):
 
 
 # ============================================================== Tahap 1: load + align
-cells = pd.read_csv(TRD / "cells.csv")
-static = (cells[["ix", "iy"]].merge(pd.read_csv(TRD / "static_human.csv"), on=["ix", "iy"], how="left")
-          .merge(pd.read_csv(TRD / "static_landcover.csv"), on=["ix", "iy"], how="left"))
+cells, static = fb.load_cells()
 NC = len(cells)
-
 ds = xr.concat([xr.open_dataset(p, engine="cfgrib", backend_kwargs={"indexpath": ""})
                 for p in sorted(TRD.glob("fwi_tr_*.grib"))], dim="time").sortby("time")
 GRIB = {"fwinx": "fwi", "ffmcode": "ffmc", "dufmcode": "dmc", "drtcode": "dc", "infsinx": "isi", "fbupinx": "bui"}
 times = pd.DatetimeIndex(ds.time.values)
 raw = {v: ds[k].values.astype(np.float32) for k, v in GRIB.items()}        # [T, P]
-valid = ~np.isnan(raw["fwi"]).all(axis=0)
-lon = ds.longitude.values
-pts = np.column_stack([ds.latitude.values, np.where(lon > 180, lon - 360, lon)])
-_, k = cKDTree(pts[valid]).query(cells[["lat_c", "lon_c"]].values)
-point = np.flatnonzero(valid)[k]
-used, cell_pt = np.unique(point, return_inverse=True)                       # cell -> column in W arrays
-log(f"cells {NC} | days {len(times)} ({times[0].date()}..{times[-1].date()}) | FWI points used {len(used)}")
-
-# weather features per point; rolling windows per year so they never bridge the Dec->Apr gap
-W = {v: a[:, used] for v, a in raw.items()}
-fw = pd.DataFrame(W["fwi"], index=times)
-yr = times.year
-roll = lambda f: fw.groupby(yr).transform(f).values.astype(np.float32)
-W["fwi_mean3"] = roll(lambda s: s.shift(1).rolling(3, min_periods=1).mean())
-W["fwi_mean7"] = roll(lambda s: s.shift(1).rolling(7, min_periods=1).mean())
-W["fwi_max7"] = roll(lambda s: s.shift(1).rolling(7, min_periods=1).max())
-dcf = pd.DataFrame(W["dc"], index=times)
-W["dc_change7"] = (dcf - dcf.groupby(yr).shift(7)).values.astype(np.float32)
-DOY = times.day_of_year.values.astype(np.float32)
+valid = np.flatnonzero(~np.isnan(raw["fwi"]).all(axis=0))
+k_used, cell_pt = fb.map_cells_to_points(cells, ds.latitude.values[valid], ds.longitude.values[valid])
+used = valid[k_used]
+W = fb.weather_features({v: a[:, used] for v, a in raw.items()}, times)
+log(f"variant {VARIANT} | cells {NC} | days {len(times)} ({times[0].date()}..{times[-1].date()}) | "
+    f"FWI points used {len(used)}")
+PT_LAT = ds.latitude.values[used]
+PT_LON = np.where(ds.longitude.values[used] > 180, ds.longitude.values[used] - 360, ds.longitude.values[used])
 del raw, ds
 
-# labels: positive (cell, day) pairs
-pos = pd.read_csv(TRD / "fire_pos.csv", parse_dates=["date"])
+# labels: wildfire (cell, day) pairs; other hotspot cell-days are excluded
+lab = pd.read_csv(TRD / "fire_pos_wild.csv", parse_dates=["date"])
+lab = lab[lab.date.isin(times)]
 cid = pd.Series(np.arange(NC), index=pd.MultiIndex.from_arrays([cells.ix, cells.iy]))
 tid = pd.Series(np.arange(len(times)), index=times)
-pos = pos[pos.date.isin(times)]
-pos_c = cid.loc[list(zip(pos.ix, pos.iy))].values
-pos_t = tid.loc[pos.date].values
+lab_c = cid.loc[list(zip(lab.ix, lab.iy))].values
+lab_t = tid.loc[lab.date].values
+wild = lab.wild.values == 1
+pos_c, pos_t = lab_c[wild], lab_t[wild]
 POS_KEY = np.sort(pos_t.astype(np.int64) * NC + pos_c)
+EXCL_KEY = np.sort(lab_t[~wild].astype(np.int64) * NC + lab_c[~wild])
 YEAR_T = times.year.values
-log("positive cell-days in FWI span:", len(POS_KEY))
+log(f"wildfire cell-days {len(POS_KEY)} | excluded (agricultural-like) {len(EXCL_KEY)}")
 print(pd.Series(YEAR_T[pos_t]).value_counts().sort_index().to_string())
 
+
 # ============================================================== Tahap 2: features
-WEATHER = ["fwi", "ffmc", "dmc", "dc", "isi", "bui", "fwi_mean3", "fwi_mean7", "fwi_max7", "dc_change7", "doy"]
-HUMAN = ["dist_road_km", "dist_set_km", "dist_farm_km", "road_km_per_cell"]
-HISTORY = ["hist_cell", "hist_nb"]
-ENV = ["lc_forest", "lc_shrub", "lc_agri", "lc_urban"]
-GROUPS = {"cuaca": WEATHER, "manusia": HUMAN, "histori": HISTORY, "lingkungan": ENV}
-FEATURES = WEATHER + HUMAN + HISTORY + ENV
-S = {c: static[c].values.astype(np.float32) for c in HUMAN + ENV}
-
-
-def history_from(years):
-    """Fire-days per year in each cell and its 3x3 neighbourhood, counted over `years`."""
-    m = np.isin(YEAR_T[pos_t], years)
-    cnt = np.bincount(pos_c[m], minlength=NC).astype(np.float32)
-    g = np.zeros((NROWS, NCOLS), np.float32)
-    g[cells.iy, cells.ix] = cnt
-    nb = convolve(g, np.ones((3, 3), np.float32), mode="constant")[cells.iy, cells.ix]
-    return np.vstack([cnt, nb]) / max(len(years), 1)
-
-
 def hist_for(train_years):
     """Leakage-safe: a training year sees only the *other* training years, any other year sees all of them."""
-    return {y: history_from([t for t in train_years if t != y]) for y in np.unique(YEAR_T)}
+    out = {}
+    for y in np.unique(YEAR_T):
+        yrs = [t for t in train_years if t != y]
+        out[y] = fb.history_from(pos_c[np.isin(YEAR_T[pos_t], yrs)], NC, cells, len(yrs))
+    return out
 
 
 def features(c, t, hist):
-    X = {v: W[v][t, cell_pt[c]] for v in WEATHER if v != "doy"}
-    X["doy"] = DOY[t]
-    X.update({k: S[k][c] for k in HUMAN + ENV})
-    h = np.empty((2, len(c)), np.float32)
-    ty = YEAR_T[t]
-    for y, hy in hist.items():
-        m = ty == y
-        h[:, m] = hy[:, c[m]]
-    X["hist_cell"], X["hist_nb"] = h
-    return pd.DataFrame(X)[FEATURES]
+    return fb.build_features(W, cell_pt, static, times, c, t, hist, USE_HIST)
 
 
-def label(c, t):
+def in_keys(keys, c, t):
     key = t.astype(np.int64) * NC + c
-    i = np.searchsorted(POS_KEY, key)
-    return (POS_KEY[np.minimum(i, len(POS_KEY) - 1)] == key).astype(np.int8)
+    i = np.searchsorted(keys, key)
+    return keys[np.minimum(i, len(keys) - 1)] == key
 
 
 def sample_set(years, hist, rate=NEG_RATE):
@@ -145,7 +116,7 @@ def sample_set(years, hist, rate=NEG_RATE):
     ts = np.flatnonzero(np.isin(YEAR_T, years))
     n = int(rate * NC * len(ts))
     c_n, t_n = RNG.integers(0, NC, n), RNG.choice(ts, n)
-    keep = label(c_n, t_n) == 0
+    keep = ~in_keys(POS_KEY, c_n, t_n) & ~in_keys(EXCL_KEY, c_n, t_n)
     m = np.isin(YEAR_T[pos_t], years)
     c = np.concatenate([pos_c[m], c_n[keep]])
     t = np.concatenate([pos_t[m], t_n[keep]])
@@ -157,7 +128,9 @@ def sample_set(years, hist, rate=NEG_RATE):
 def full_year(year, hist):
     ts = np.flatnonzero(YEAR_T == year)
     c, t = np.tile(np.arange(NC), len(ts)), np.repeat(ts, NC)
-    return features(c, t, hist), label(c, t), c, t
+    keep = ~in_keys(EXCL_KEY, c, t)
+    c, t = c[keep], t[keep]
+    return features(c, t, hist), in_keys(POS_KEY, c, t).astype(np.int8), c, t
 
 
 # ============================================================== Tahap 3: model
@@ -193,19 +166,21 @@ best = None
 for leaves in (15, 63, 255):
     for sw in (1.0, np.sqrt(spw)):
         m = fit_lgbm(Xtr, ytr, wtr, Xvs, yvs, wvs, num_leaves=leaves, scale_pos_weight=sw)
-        ap = average_precision_score(yva, predict(m, Xva))
-        log(f"num_leaves={leaves} scale_pos_weight={sw:.0f} trees={m.best_iteration_} val PR-AUC={ap:.4f}")
-        if best is None or ap > best[0]:
-            best = (ap, leaves, sw != 1.0, m.best_iteration_)
+        apv = average_precision_score(yva, predict(m, Xva))
+        log(f"num_leaves={leaves} scale_pos_weight={sw:.0f} trees={m.best_iteration_} val PR-AUC={apv:.4f}")
+        if best is None or apv > best[0]:
+            best = (apv, leaves, sw != 1.0, max(m.best_iteration_, 50))
 _, LEAVES, SPW_SQRT, N_IT = best
 log("terbaik:", best)
 
 
-def train_all(years, hist):
+def train_all(years, hist, with_lr=True):
     X, y, w = sample_set(years, hist)
-    lr = make_pipeline(SimpleImputer(strategy="median"), StandardScaler(),
-                       LogisticRegression(class_weight="balanced", max_iter=2000))
-    lr.fit(X, y, logisticregression__sample_weight=w)
+    lr = None
+    if with_lr:
+        lr = make_pipeline(SimpleImputer(strategy="median"), StandardScaler(),
+                           LogisticRegression(class_weight="balanced", max_iter=2000))
+        lr.fit(X, y, logisticregression__sample_weight=w)
     r = w[y == 0].sum() / y.sum()
     gbm = fit_lgbm(X, y, w, n_estimators=int(N_IT * 1.1), num_leaves=LEAVES,
                    scale_pos_weight=np.sqrt(r) if SPW_SQRT else 1.0)
@@ -230,9 +205,10 @@ del Xva, Xtr, Xvs
 
 h_test = hist_for([2021, 2022, 2023, 2024])
 lr_a, model_a = train_all([2021, 2022, 2023, 2024], h_test)
-X25, y25, c25, _ = full_year(2025, h_test)
+X25, y25, c25, t25 = full_year(2025, h_test)
 r, p25 = report(X25, y25, c25, lr_a, model_a, "test 2025")
 rows += r
+CUTS_LIVE = fb.season_cuts(p25, times[t25].month)          # out-of-sample cuts for the live model
 log("test 2025 done")
 
 h_hind = hist_for([2022, 2023, 2024, 2025])
@@ -242,7 +218,7 @@ r, p21 = report(X21, y21, c21, lr_b, model_b, "hindcast 2021")
 rows += r
 metrics = pd.DataFrame(rows).set_index(["set", "region", "model"])
 (ROOT / "models").mkdir(exist_ok=True)
-metrics.round(4).to_csv(ROOT / "models/metrics_turkiye.csv")
+metrics.round(4).to_csv(ROOT / f"models/metrics_turkiye_{VARIANT}.csv")
 with pd.option_context("display.width", 200, "display.max_rows", 100):
     print(metrics.round(3).to_string())
 
@@ -261,30 +237,46 @@ print(pd.DataFrame({"semua sel (%)": group_share(contrib), "top 1% risiko (%)": 
 print(contrib.abs().mean().sort_values(ascending=False).round(4).to_string())
 del X25
 
-# ============================================================== Tahap 4: risk map + dashboard
-CLASSES = ["rendah", "sedang", "tinggi", "ekstrem"]
-season = np.isin(pd.DatetimeIndex(times[t21]).month, [6, 7, 8, 9])
-CUTS = {"probs": np.quantile(p21[season], [0, 0.80, 0.95, 0.99, 1]).tolist(), "scores": [0, 0.30, 0.55, 0.75, 1]}
-to_score = lambda prob: np.interp(prob, CUTS["probs"], CUTS["scores"])
-
-joblib.dump({"model": model_a, "model_hindcast_2021": model_b, "features": FEATURES, "groups": GROUPS,
-             "risk_cuts": CUTS, "grid": {"bbox": [LON0, LAT0, LON1, LAT1], "cell": CELL},
-             "neg_rate": NEG_RATE, "tuned": {"num_leaves": LEAVES, "sqrt_spw": SPW_SQRT, "trees": N_IT}},
-            ROOT / "models/fire_lgbm_turkiye.joblib")
-
+# ============================================================== Tahap 4: risk map check
+CUTS = fb.season_cuts(p21, times[t21].month)
 days = pd.date_range("2021-07-27", "2021-08-02")
 dmask = np.isin(times[t21], days)
-Xw, cw, tw = X21[dmask.astype(bool)], c21[dmask], t21[dmask]
-score_w = to_score(p21[dmask])
+Xw, cw, tw = X21[dmask], c21[dmask], t21[dmask]
+score_w = fb.fwi_ceiling(fb.to_score(p21[dmask], CUTS), Xw.fwi.values)
 fires_w = y21[dmask]
-log("week fires:", int(fires_w.sum()))
-print(pd.cut(score_w[fires_w == 1], [-1, 0.30, 0.55, 0.75, 2], labels=CLASSES).value_counts().sort_index())
+bins = [-1, 0.30, 0.55, 0.75, 2]
+log("week wildfire cell-days:", int(fires_w.sum()))
+print(pd.cut(score_w[fires_w == 1], bins, labels=fb.CLASSES).value_counts().sort_index().to_string())
+print("megafire sites (5x5 cells), max score per day and class of burning cells:")
+for name, lo, la in fb.MEGAFIRES:
+    s = fb.site_cells(cells, lo, la)
+    m = np.isin(cw, s)
+    daymax = [score_w[m & (times[tw] == d)].max() for d in days]
+    burn = pd.cut(score_w[m & (fires_w == 1)], bins, labels=fb.CLASSES).value_counts()
+    print(f"  {name:16s} max {np.round(daymax, 2)} | burning: {dict(burn[burn > 0])}")
+topcells = np.bincount(cw, weights=score_w, minlength=NC) / 7
+t1 = topcells >= np.quantile(topcells, 0.99)
+print("top 1% week cells by longitude band:",
+      dict(zip(["25-28", "28-31", "31-34", "34-37", "37-40", "40-45"],
+               np.histogram(cells.lon_c.values[t1], bins=[25, 28, 31, 34, 37, 40, 45])[0])))
+if not ARGS.export:
+    log("done (no export)")
+    sys.exit()
+
+# final live model: all labelled years, history from all of them
+h_live = fb.history_from(pos_c[np.isin(YEAR_T[pos_t], range(2021, 2026))], NC, cells, 5)
+_, model_live = train_all([2021, 2022, 2023, 2024, 2025], {y: h_live for y in np.unique(YEAR_T)}, with_lr=False)
+joblib.dump({"model": model_a, "model_hindcast_2021": model_b, "model_live": model_live,
+             "features": FEATURES, "groups": GROUPS, "use_history": USE_HIST,
+             "risk_cuts": CUTS, "risk_cuts_live": CUTS_LIVE, "hist_live": h_live,
+             "grid": {"bbox": [LON0, LAT0, LON1, LAT1], "cell": CELL}, "fwi_points": used, "cell_pt": cell_pt,
+             "fwi_point_lat": PT_LAT, "fwi_point_lon": PT_LON,
+             "neg_rate": NEG_RATE, "tuned": {"num_leaves": LEAVES, "sqrt_spw": SPW_SQRT, "trees": N_IT}},
+            ROOT / "models/fire_lgbm_turkiye.joblib")
+shutil.copy(ROOT / f"models/metrics_turkiye_{VARIANT}.csv", ROOT / "models/metrics_turkiye.csv")
 
 # per-cell SHAP group shares, averaged over the week (hindcast model)
-cw_all = model_b.booster_.predict(Xw, pred_contrib=True)[:, :-1]
-gabs = np.column_stack([np.abs(cw_all[:, [FEATURES.index(f) for f in v]]).sum(axis=1) for v in GROUPS.values()])
-gcell = np.vstack([np.bincount(cw, weights=gabs[:, j], minlength=NC) for j in range(gabs.shape[1])]).T
-shap_pct = np.rint(100 * gcell / gcell.sum(axis=1, keepdims=True)).astype(int)
+shap_pct = fb.shap_group_pct(model_b.booster_, Xw, cw, NC, USE_HIST)
 
 dash_path = ROOT / "bizdenbize/dashboard/data.json"
 old = json.loads(dash_path.read_text(encoding="utf-8"))
@@ -292,47 +284,68 @@ pilot_copy = dash_path.with_name("data.pilot.json")
 if not pilot_copy.exists() and old["meta"]["bbox"] == list(PILOT):
     shutil.copy(dash_path, pilot_copy)
 
-lc = static[ENV].values
-landcover = np.where(lc.max(axis=1) >= 0.05, lc.argmax(axis=1), 4)        # 4 = not mapped in OSM
-fwi_days, risk_days = [], []
-for d in days:
-    m = times[tw] == d
-    f, s = np.zeros(NC), np.zeros(NC)
-    f[cw[m]], s[cw[m]] = Xw.fwi.values[m], score_w[m]
-    fwi_days.append(np.round(f, 1).tolist())
-    risk_days.append(np.round(s, 3).tolist())
 
-bbox_poly = box(LON0, LAT0, LON1, LAT1)
-roads = gpd.read_file(TRD / "osm_roads.gpkg")
-roads = roads[roads.fclass.isin(["motorway", "trunk", "primary"])]
-merged = shapely.line_merge(shapely.union_all(roads.geometry.values))
-lines = gpd.GeoSeries([merged], crs=4326).explode(index_parts=False).to_crs(3035).simplify(500).to_crs(4326)
-road_json = [[[round(x, 3), round(y, 3)] for x, y in g.coords] for g in lines if len(g.coords) > 1 and g.length > 0]
-towns = gpd.read_file(TRD / "osm_settlements.gpkg")
-towns = towns[towns.fclass.isin(["city", "town"])].copy()
-# the Geofabrik extract reaches a little over the land border: keep towns inside the national
-# boundary (it includes territorial waters, so coastal towns stay)
-admin = gpd.read_file(TRD / "adminareas.gpkg", columns=["fclass"])
-towns = towns[towns.within(admin[admin.fclass == "national"].union_all())]
-towns["population"] = pd.to_numeric(towns.population, errors="coerce").fillna(0)
-towns = towns.sort_values("population", ascending=False)
+def landcover_class(st):
+    """Dashboard class: 0 forest, 1 shrub, 2 agriculture, 3 urban, 4 other (grass/bare)."""
+    lc = st[["wc_tree", "wc_shrub", "wc_crop", "wc_built"]].fillna(0).values
+    return np.where(lc.max(axis=1) >= 0.2, lc.argmax(axis=1), 4)
 
+
+def day_layers(X, c, t, score, day_list):
+    fwi_days, risk_days = [], []
+    for d in day_list:
+        m = times[t] == d
+        f, s = np.zeros(NC), np.zeros(NC)
+        f[c[m]], s[c[m]] = X.fwi.values[m], score[m]
+        fwi_days.append(np.round(f, 1).tolist())
+        risk_days.append(np.round(s, 3).tolist())
+    return fwi_days, risk_days
+
+
+def base_layers():
+    roads = gpd.read_file(TRD / "osm_roads.gpkg")
+    roads = roads[roads.fclass.isin(["motorway", "trunk", "primary"])]
+    merged = shapely.line_merge(shapely.union_all(roads.geometry.values))
+    lines = gpd.GeoSeries([merged], crs=4326).explode(index_parts=False).to_crs(3035).simplify(500).to_crs(4326)
+    road_json = [[[round(x, 3), round(y, 3)] for x, y in g.coords] for g in lines if len(g.coords) > 1 and g.length > 0]
+    towns = gpd.read_file(TRD / "osm_settlements.gpkg")
+    towns = towns[towns.fclass.isin(["city", "town"])].copy()
+    # the Geofabrik extract reaches a little over the land border: keep towns inside the national boundary
+    admin = gpd.read_file(TRD / "adminareas.gpkg", columns=["fclass"])
+    towns = towns[towns.within(admin[admin.fclass == "national"].union_all())]
+    towns["population"] = pd.to_numeric(towns.population, errors="coerce").fillna(0)
+    towns = towns.sort_values("population", ascending=False)
+    sets = [[n, round(g.x, 3), round(g.y, 3), int(p)]
+            for n, g, p in zip(towns.name, towns.geometry, towns.population) if isinstance(n, str)]
+    return road_json, sets
+
+
+fwi_days, risk_days = day_layers(Xw, cw, tw, score_w, days)
+road_json, settlements = base_layers()
 dash = {
-    "meta": {**old["meta"], "demo": False, "bbox": [LON0, LAT0, LON1, LAT1], "cell": CELL,
+    "meta": {**old["meta"], "demo": False, "mode": "hindcast", "dates": [d.strftime("%Y-%m-%d") for d in days],
+             "bbox": [LON0, LAT0, LON1, LAT1], "cell": CELL,
              "ncols": NCOLS, "nrows": NROWS, "pilot_bbox": list(PILOT), "coverage": "turkiye",
              "groups": list(GROUPS),
              "note": ("Cakupan: seluruh Türkiye (sel 0,05°). FWI: Copernicus CEMS/EFFIS. Risiko: LightGBM dilatih "
-                      "2022-2025 (hindcast, 2021 tidak dilihat model). Jalan/permukiman/tutupan lahan: OpenStreetMap. "
-                      "Label: EFFIS hotspot VIIRS. Elevasi & lereng belum tersedia.")},
+                      "2022-2025 (hindcast, 2021 tidak dilihat model) pada label kebakaran hutan (hotspot VIIRS "
+                      "tanpa pembakaran lahan pertanian). Jalan/permukiman: OpenStreetMap. Tutupan lahan: ESA "
+                      "WorldCover 2021. Elevasi & lereng: Copernicus DEM GLO-90. Kelas dibatasi oleh tingkat "
+                      "bahaya FWI hari itu (FWI < 5,2 maks. rendah; < 11,2 maks. sedang; < 21,3 maks. tinggi).")},
     "cells": {"ix": cells.ix.tolist(), "iy": cells.iy.tolist(),
               "dist_road": static.dist_road_km.round(1).tolist(), "dist_set": static.dist_set_km.round(1).tolist(),
-              "elev": [None] * NC, "slope": [None] * NC, "landcover": landcover.tolist(),
+              "elev": static.elev_m.round(0).fillna(0).astype(int).tolist(),
+              "slope": static.slope_mean.round(1).fillna(0).tolist(),
+              "landcover": landcover_class(static).tolist(),
               "shap": shap_pct.T.tolist(), "fwi": fwi_days, "risk": risk_days},
     "roads": road_json,
-    "settlements": [[n, round(g.x, 3), round(g.y, 3), int(p)]
-                    for n, g, p in zip(towns.name, towns.geometry, towns.population) if isinstance(n, str)],
+    "settlements": settlements,
     "fires": old.get("fires", []),
 }
 dash_path.write_text(json.dumps(dash, separators=(",", ":"), ensure_ascii=False), encoding="utf-8")
+# static layers reused by 06_predict_live.py
+(TRD / "dashboard_base.json").write_text(json.dumps(
+    {"roads": road_json, "settlements": settlements, "fires": dash["fires"]}, separators=(",", ":"),
+    ensure_ascii=False), encoding="utf-8")
 log(f"data.json: {dash_path.stat().st_size // 1024} KB | cells {NC} | roads {len(road_json)} | "
-    f"settlements {len(dash['settlements'])}")
+    f"settlements {len(settlements)}")

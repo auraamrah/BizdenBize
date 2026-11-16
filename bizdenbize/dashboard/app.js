@@ -32,7 +32,7 @@
       f3: "<b>Not:</b> 27 Tem – 2 Ağu 2021 haftası geriye dönük tahmindir (model 2022–2025 ile eğitildi, 2021'i görmedi). " +
           "Yükseklik ve eğim henüz yok; yangın geçmişi üçgenleri yaklaşık konumdur.",
       classes: ["Düşük", "Orta", "Yüksek", "Ekstrem"],
-      lc: ["Orman", "Maki/çalılık", "Tarım", "Yerleşim", "Haritalanmamış (OSM)"],
+      lc: ["Orman", "Maki/çalılık", "Tarım", "Yerleşim", "Çayır/çıplak alan"],
       days: ["Pzt 27/7", "Sal 28/7", "Çar 29/7", "Per 30/7", "Cum 31/7", "Cmt 1/8", "Paz 2/8"],
       layers: { risk: "Risk (sınıf)", fwi: "FWI", droad: "Yola uzaklık", dset: "Yerleşime uzaklık" },
       legRisk: "▲ yangın geçmişi · ● yerleşim",
@@ -50,6 +50,8 @@
                 "Bitki örtüsü yakıtı", "Eğim"],
       mcontrib: "Model katkısı (SHAP, hafta ortalaması)",
       mfactors: ["Hava & kuraklık", "İnsan erişimi", "Yangın geçmişi", "Arazi örtüsü"],
+      mfactorsAll: ["Hava & kuraklık", "İnsan erişimi", "Yangın geçmişi", "Arazi örtüsü & arazi"],
+      liveBadge: "CANLI TAHMİN", active: "Aktif yangın noktası (FIRMS)", agri: "muhtemelen tarımsal yakma",
       loadfail: "Veri yüklenemedi"
     },
     en: {
@@ -80,7 +82,7 @@
       f3: "<b>Note:</b> the week 27 Jul – 2 Aug 2021 is a hindcast (model trained on 2022–2025, never saw 2021). " +
           "Elevation and slope are not available yet; fire-history triangles are approximate locations.",
       classes: ["Low", "Moderate", "High", "Extreme"],
-      lc: ["Forest", "Maquis/shrubland", "Agriculture", "Settlement", "Not mapped (OSM)"],
+      lc: ["Forest", "Maquis/shrubland", "Agriculture", "Settlement", "Grassland/bare"],
       days: ["Mon 27/7", "Tue 28/7", "Wed 29/7", "Thu 30/7", "Fri 31/7", "Sat 1/8", "Sun 2/8"],
       layers: { risk: "Risk (class)", fwi: "FWI", droad: "Distance to road", dset: "Distance to settlement" },
       legRisk: "▲ fire history · ● settlement",
@@ -98,6 +100,8 @@
                 "Vegetation fuel", "Slope"],
       mcontrib: "Model contribution (SHAP, week mean)",
       mfactors: ["Weather & drought", "Human access", "Fire history", "Land cover"],
+      mfactorsAll: ["Weather & drought", "Human access", "Fire history", "Land cover & terrain"],
+      liveBadge: "LIVE FORECAST", active: "Active fire hotspot (FIRMS)", agri: "likely agricultural burning",
       loadfail: "Failed to load data"
     }
   };
@@ -181,6 +185,12 @@
       });
     }
 
+    if (document.getElementById("ovFires").checked && D.active_fires) {
+      D.active_fires.forEach(function (a) {
+        ctx.beginPath(); ctx.arc(X(a[0]), Y(a[1]), a[3] ? 3 : 2, 0, 2 * Math.PI);
+        ctx.fillStyle = a[3] ? "#ff6a00" : "rgba(255,160,60,.6)"; ctx.fill();
+      });
+    }
     if (document.getElementById("ovFires").checked) {
       D.fires.forEach(function (f) {
         var px = X(f[1]), py = Y(f[2]), s = 4 + Math.sqrt(f[4]) / 28;
@@ -286,7 +296,12 @@
         className: "", iconSize: [s, s],
         html: '<div style="color:#d03b3b;font-size:' + s + 'px;line-height:1;text-shadow:0 0 2px #fff">▲</div>' }) })
         .bindTooltip(function () { return fireTip(f); });
-    }));
+    }).concat((D.active_fires || []).map(function (a) {
+      return L.circleMarker([a[1], a[0]], { radius: a[3] ? 4 : 3, stroke: false,
+                                            fillColor: a[3] ? "#ff6a00" : "#ffa03c", fillOpacity: a[3] ? 0.95 : 0.6 })
+        .bindTooltip(function () { return "<b>" + T().active + "</b> · " + a[2] +
+                                          (a[3] ? "" : "<br><i>" + T().agri + "</i>"); });
+    })));
 
     var Zoom = L.Control.extend({
       onAdd: function () {
@@ -584,8 +599,26 @@
   }
 
   // ---------------------------------------------------------------- init --
+  var GROUP_INDEX = { cuaca: 0, manusia: 1, histori: 2, lingkungan: 3 };
+  function applyMeta() {
+    var m = D.meta, names = { tr: ["Paz", "Pzt", "Sal", "Çar", "Per", "Cum", "Cmt"],
+                              en: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"] };
+    ["tr", "en"].forEach(function (l) {
+      var t = I18N[l];
+      t.days = m.dates.map(function (iso) {
+        var d = new Date(iso + "T12:00:00");
+        return names[l][d.getDay()] + " " + d.getDate() + "/" + (d.getMonth() + 1);
+      });
+      if (m.mode === "live") t.badge = t.liveBadge + " · " + String(m.generated_at).replace("T", " ");
+      if (m.groups) t.mfactors = m.groups.map(function (g) { return t.mfactorsAll[GROUP_INDEX[g]]; });
+    });
+    if (m.mode === "live") day = 0;
+    if (day >= m.dates.length) day = m.dates.length - 1;
+  }
+
   function init(data) {
     D = data;
+    if (D.meta.dates) applyMeta();
     cv = document.getElementById("map"); ctx = cv.getContext("2d");
 
     KMX = 111.32 * Math.cos((D.meta.bbox[1] + D.meta.bbox[3]) / 2 * Math.PI / 180);
@@ -665,7 +698,7 @@
     applyLang();
   }
 
-  fetch("data.json")
+  fetch(/[?&]live(=|&|$)/.test(location.search) ? "data.live.json" : "data.json")
     .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
     .then(init)
     .catch(function (e) {

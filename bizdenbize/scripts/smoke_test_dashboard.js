@@ -6,7 +6,10 @@ const fs = require("fs");
 const vm = require("vm");
 const path = require("path");
 
-const DATA = JSON.parse(fs.readFileSync(path.join(__dirname, "../dashboard/data.json"), "utf8"));
+// usage: node smoke_test_dashboard.js [data.json | data.live.json]
+const FILE = process.argv[2] || "data.json";
+const DATA = JSON.parse(fs.readFileSync(path.join(__dirname, "../dashboard", FILE), "utf8"));
+const START_DAY = DATA.meta.mode === "live" ? 0 : 5;
 const CODE = fs.readFileSync(path.join(__dirname, "../dashboard/app.js"), "utf8");
 
 const ctxProxy = new Proxy({}, {
@@ -46,7 +49,7 @@ byId("map").parentNode = makeEl("mapwrap");
 
 const createdCols = [];
 const sandbox = {
-  console, Math, Map, JSON, Error, String, Number, Promise, Date,
+  console, Math, Map, JSON, Error, String, Number, Promise, Date, location: { search: "" },
   window: {
     matchMedia: () => ({ matches: false, addEventListener: () => {} }),
     addEventListener: () => {},
@@ -70,7 +73,7 @@ setTimeout(() => {
     bars.children.forEach(c => createdCols.push(c));
 
     // 1) KPI hari puncak (slider default = 5) harus cocok dengan data.json
-    const expect = String(DATA.cells.risk[5].filter(r => r >= 0.75).length);
+    const expect = String(DATA.cells.risk[START_DAY].filter(r => r >= 0.75).length);
     const got = byId("kpi1").textContent;
     if (got !== expect) throw new Error("KPI ekstrem hari puncak = " + got + ", harap " + expect);
 
