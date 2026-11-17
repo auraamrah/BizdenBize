@@ -1,6 +1,6 @@
 # BizdenBize
 
-**BizdenBize** (Turkish for "from us", used with the hashtag #BizdenBize) is a daily wildfire-risk platform for Türkiye. It estimates, for every land cell of a 0.05° grid covering the whole country, how likely a wildfire is on each of the next seven days. The result is shown on an interactive map with four risk classes: *düşük* (low), *orta* (moderate), *yüksek* (high) and *aşırı* (extreme).
+**BizdenBize** (Turkish for "from us", used with the hashtag #BizdenBize) is a daily wildfire-risk platform for Türkiye. It estimates, for every land cell of a 0.05° grid covering the whole country, how likely a wildfire is on each of the next seven days. The result is shown on an interactive map with four risk classes: *düşük* (low), *orta* (moderate), *yüksek* (high) and *ekstrem* (extreme).
 
 The project was developed for the COP31 Climate Tech Creathon in Antalya, Türkiye. The pilot region is Antalya–Muğla, and the national model is trained on the same method. The project's base article is Bilgili's *"Forest Fires in 2021"* (Kızılay Akademi), and the 2021 megafires it discusses serve as the main validation case.
 
@@ -27,10 +27,10 @@ A label records whether a fire happened in a given cell on a given day. `02_buil
 ### Layer 3 — Features
 `firebridge_core.py` holds the shared feature code. It is used by both training and live prediction, so the two always build the same input table. The features fall into four groups:
 
-- **Weather (cuaca):** the six FWI components (FFMC, DMC, DC, ISI, BUI and the FWI itself), together with 3-day and 7-day rolling means and maxima, the 7-day change in the Drought Code, and the day of the year. Rolling windows never cross from one year into the next.
-- **Human access (manusia):** distance from each cell to the nearest road, settlement, and farmland, and the total road length inside the cell. Human-caused fires cluster near access routes, so these distances carry much of the signal.
-- **History (histori):** the number of fire-days per year in the cell and in its 3×3 neighbourhood. Training uses only other training years, so the history feature never sees the answer for the year it is predicting.
-- **Environment (lingkungan):** land-cover shares from ESA WorldCover 2021 (tree, shrub, grass, cropland, built-up) and elevation and slope from the Copernicus DEM GLO-90.
+- **Weather (Hava Durumu):** the six FWI components (FFMC, DMC, DC, ISI, BUI and the FWI itself), together with 3-day and 7-day rolling means and maxima, the 7-day change in the Drought Code, and the day of the year. Rolling windows never cross from one year into the next.
+- **Human access (erişimi):** distance from each cell to the nearest road, settlement, and farmland, and the total road length inside the cell. Human-caused fires cluster near access routes, so these distances carry much of the signal.
+- **History (tarih):** the number of fire-days per year in the cell and in its 3×3 neighbourhood. Training uses only other training years, so the history feature never sees the answer for the year it is predicting.
+- **Environment (çevre):** land-cover shares from ESA WorldCover 2021 (tree, shrub, grass, cropland, built-up) and elevation and slope from the Copernicus DEM GLO-90.
 
 `firebridge_fwi.py` implements the Canadian FWI equations in Python. The live pipeline needs this module because weather forecasts do not come with FWI values, so the indices must be computed from temperature, humidity, wind, and rain.
 
@@ -111,5 +111,3 @@ JUKUT/
 The team is made up of Indonesian students studying in Türkiye. Pilot work is based in Antalya and Muğla in Türkiye, with a planned pilot in Central Kalimantan, Indonesia. An awareness-raising campaign is planned alongside the technical work.
 
 ---
-
-*Licence and contributor details: to be added by the team.*
