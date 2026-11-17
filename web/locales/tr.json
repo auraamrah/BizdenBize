@@ -1,0 +1,597 @@
+{
+  "meta": {
+    "name": "Türkçe",
+    "short": "TR",
+    "locale": "tr-TR"
+  },
+  "common": {
+    "brandSub": "Orman yangını riski",
+    "citizen": "Vatandaş",
+    "citizenLong": " görünümü",
+    "science": "Bilim",
+    "scienceLong": " görünümü",
+    "reports": "İhbarlar",
+    "language": "Dil",
+    "themeToLight": "Açık temaya geç",
+    "themeToDark": "Koyu temaya geç",
+    "dataset": "Veri seti",
+    "datasetLive": "Canlı tahmin",
+    "datasetHindcast": "Geriye dönük · 27 Tem – 2 Ağu 2021",
+    "bannerLabel": "Model tahmini",
+    "bannerLive": "BizdenBize model çalışması: {time}. Resmî OGM uyarısı değildir. Acil durumda 112’yi arayın.",
+    "bannerHindcast": "2021 mega yangın haftasının tekrarı; model 2021’i görmeden puanladı. Canlı tahmin değildir.",
+    "bannerStale": "Bu tahmin 36 saatten eski. Bugünün uyarıları için OGM’yi kontrol edin.",
+    "loadError": "Risk verisi yüklenemedi ({file}). Sayfayı yenileyin; sorun sürerse günlük model çıktısı henüz yayımlanmamış olabilir.",
+    "footerLeft": "#BizdenBize · COP31 İklim Teknolojisi Creathon · Antalya 2026",
+    "footerRight": "Model: EFFIS/Copernicus FWI üzerinde LightGBM · Open-Meteo · NASA FIRMS · OpenStreetMap · ESA WorldCover · OGM",
+    "close": "Kapat",
+    "today": "Bugün",
+    "population": "nüfus {n}",
+    "mapAttribution": "Risk: BizdenBize modeli"
+  },
+  "levels": {
+    "low": {
+      "name": "Düşük",
+      "tag": "NORMAL FAALİYET",
+      "meaning": "Yangın zor başlar ve yavaş yayılır.",
+      "todo": [
+        "Ormanın tadını çıkarın",
+        "Tarla işlerini normal planlayın"
+      ]
+    },
+    "moderate": {
+      "name": "Orta",
+      "tag": "DİKKATLİ OLUN",
+      "meaning": "Yangın başlayabilir. Kuru ot kolay tutuşur.",
+      "todo": [
+        "Ateşi yalnızca sabit mangal yerlerinde yakın",
+        "Anız ve bahçe atığı yakmayın"
+      ]
+    },
+    "high": {
+      "name": "Yüksek",
+      "tag": "AÇIK ALANDA ATEŞ YOK",
+      "meaning": "Yangın kolay başlar ve hızla yayılır.",
+      "todo": [
+        "Hiçbir yerde mangal ve kamp ateşi yakmayın",
+        "Açık alanda hiç ateş yakmayın, çay için bile"
+      ]
+    },
+    "extreme": {
+      "name": "Aşırı",
+      "tag": "ORMANA GİRMEYİN",
+      "meaning": "Çıkan bir yangını durdurmak çok zor olur.",
+      "todo": [
+        "Bugün ormana girmeyin",
+        "Kıvılcım çıkarabilecek makineleri kullanmayın"
+      ]
+    },
+    "scoreLabel": "model puanı"
+  },
+  "actions": {
+    "farmer": {
+      "low": [
+        "Tarla işlerini normal planlayın",
+        "Anızı yakmayın; toprağa karıştırın",
+        "Tarlada su bidonu ve kürek bulundurun"
+      ],
+      "moderate": [
+        "Makineleri sıcak öğleden sonra değil, sabah çalıştırın",
+        "Anız ve bahçe atığı yakmayın",
+        "Tarlada su bidonu ve kürek bulundurun"
+      ],
+      "high": [
+        "Kıvılcım çıkaran makinelerle hasadı durdurun",
+        "Açık alanda hiç ateş yakmayın",
+        "Binaların 10 m çevresindeki kuru otları temizleyin"
+      ],
+      "extreme": [
+        "Orman yakınındaki tüm tarla işlerini durdurun",
+        "Kıvılcım çıkarabilecek makineleri kullanmayın",
+        "Köyünüzün tahliye yolunu öğrenin"
+      ]
+    },
+    "visitor": {
+      "low": [
+        "Ormanın tadını çıkarın",
+        "Yalnızca sabit mangal yerlerini kullanın",
+        "Cam ve çöplerinizi geri götürün"
+      ],
+      "moderate": [
+        "Mangalı yalnızca sabit yerlerde yakın",
+        "Araçtan asla sigara atmayın",
+        "Cam ve çöplerinizi geri götürün"
+      ],
+      "high": [
+        "Hiçbir yerde mangal ve kamp ateşi yakmayın",
+        "Yalnızca çakıl veya asfalt üzerine park edin",
+        "112’yi telefonunuza kaydedin"
+      ],
+      "extreme": [
+        "Bugün ormana girmeyin",
+        "Plajı ya da şehir gezisini seçin",
+        "Duman görürseniz önce 112’yi arayın"
+      ]
+    },
+    "volunteer": {
+      "low": [
+        "Bu hafta bir patika temizliğine katılın",
+        "Köyün yangın setini kontrol edin",
+        "Bugünün rengini grubunuzla paylaşın"
+      ],
+      "moderate": [
+        "Köyün yangın setini kontrol edin",
+        "Komşulara hatırlatın: anız yakmak yok",
+        "Bugünün rengini grubunuzla paylaşın"
+      ],
+      "high": [
+        "Akşam gözetleme nöbetine katılın",
+        "Telefonunuzu şarjlı ve açık tutun",
+        "Bugünün rengini grubunuzla paylaşın"
+      ],
+      "extreme": [
+        "Muhtarın talimatlarına uyun",
+        "Yaşlı komşuların ayrılmaya hazır olmasına yardım edin",
+        "Yangınla kendiniz mücadele etmeyin — 112’yi arayın"
+      ]
+    }
+  },
+  "live": {
+    "searchLabel": "Kasaba veya köy ara",
+    "searchPlaceholder": "Kasaba veya köy ara",
+    "nearMe": "Yakınımda",
+    "suggested": "EN BÜYÜK YERLEŞİMLER",
+    "matching": "EŞLEŞEN YERLER",
+    "noMatch": "Modelin listesinde “{q}” adlı bir yer yok. Bunun yerine haritaya dokunun.",
+    "fireRisk": "YANGIN RİSKİ",
+    "score": "PUAN {s}",
+    "danger": "{level} TEHLİKE",
+    "mean10": "Yerleşim merkezinin 10 km çevresindeki model hücrelerinin ortalaması.",
+    "pointNote": "Bu noktanın çevresindeki yaklaşık 5 km’lik model hücresi.",
+    "spotName": "{town} yakınında bir nokta",
+    "spotNameNone": "Seçilen nokta",
+    "weatherNow": "Şu anki hava · {place}",
+    "weatherBy": "Open-Meteo · {time}",
+    "weatherTitle": "Canlı hava",
+    "weatherHindcast": "2021 tekrarında gösterilmez",
+    "weatherError": "Open-Meteo’ya ulaşılamadı. Bağlantınızı kontrol edip yenileyin.",
+    "loading": "Yükleniyor…",
+    "temp": "Sıcaklık",
+    "humidity": "Nem",
+    "wind": "Rüzgâr",
+    "next7": "ÖNÜMÜZDEKİ 7 GÜN",
+    "days7": "7 GÜN",
+    "whatToDo": "NE YAPABİLİRSİNİZ",
+    "roles": {
+      "farmer": "Çiftçi",
+      "visitor": "Ziyaretçi",
+      "volunteer": "Gönüllü"
+    },
+    "listen": "Dinle",
+    "share": "Paylaş",
+    "whatsapp": "WhatsApp",
+    "callSmoke": "Duman mı gördünüz? Arayın",
+    "dataBehind": "Arkasındaki veriyi gör →",
+    "mapHint": "Herhangi bir noktayı görmek için haritaya dokunun.",
+    "showLow": "Düşük riskli hücreleri göster",
+    "showFires": "Aktif yangınlar (NASA FIRMS)",
+    "showTowns": "Yerleşimler",
+    "coloursLink": "Renkler ne anlama geliyor",
+    "dropTitle": "Duman veya yangın riski mi gördünüz? Fotoğraf ya da video ekleyin",
+    "dropText": "Buraya bırakın ya da kamerayı açmak için dokunun. Yeri ve saati fotoğraftan okuyoruz.",
+    "sendReport": "İhbar gönder",
+    "guideTitle": "Renkler ne anlama geliyor",
+    "guideSub": "Tek ve basit bir ölçek, Türkiye’nin her yerinde aynı.",
+    "todayBadge": "BUGÜN",
+    "spoken": "{place} için yangın riski {level}. {meaning} {first}.",
+    "waText": "{place} yangın riski: {level} ({tag}). {meaning} — #BizdenBize: {url}",
+    "toastFinding": "Konumunuz bulunuyor…",
+    "toastUsing": "Konumunuz kullanılıyor — en yakın yerleşim: {town}",
+    "toastBlocked": "Konum izni yok. Bunun yerine yerleşiminizi arayın.",
+    "toastNoGeo": "Bu tarayıcıda konum kullanılamıyor.",
+    "toastOutside": "Model alanının dışındasınız. En yakın yerleşim gösteriliyor: {town}",
+    "toastReading": "Yangın riski sesli okunuyor…",
+    "toastNoSpeech": "Bu tarayıcı metni sesli okuyamıyor.",
+    "firePopup": "Uydu ısı tespiti (NASA FIRMS VIIRS), {date}"
+  },
+  "science": {
+    "title": "Bilim görünümü",
+    "kpiModerate": "Orta veya üzeri hücreler",
+    "kpiModerateNote": "{date} · {n} kara hücresinden",
+    "kpiHigh": "Yüksek veya Aşırı hücreler",
+    "kpiHighNote": "karanın {share}’i",
+    "kpiFwi": "Ortalama FWI (tüm kara)",
+    "kpiFwiNote": "en yüksek {max}",
+    "kpiFires": "Aktif yangınlar (uydu)",
+    "kpiFiresNote": "NASA FIRMS VIIRS, son çalışma",
+    "layerClass": "Risk sınıfı",
+    "layerScore": "Risk puanı",
+    "layerFwi": "Yangın Hava İndeksi",
+    "cellDetail": "Hücre ayrıntısı",
+    "clickCell": "Puanının nedenini görmek için haritada bir hücreye tıklayın.",
+    "score": "Risk puanı",
+    "fwi": "Yangın Hava İndeksi (FWI)",
+    "coords": "Koordinatlar",
+    "nearestTown": "En yakın yerleşim",
+    "drivers": "PUANI NE BELİRLİYOR (SHAP PAYI)",
+    "groups": {
+      "weather": "Hava ve kuraklık",
+      "human": "İnsan erişimi",
+      "history": "Yangın geçmişi",
+      "environment": "Arazi örtüsü ve yüzey"
+    },
+    "chartTitle": "Güne göre Orta ve üzeri hücreler",
+    "chartSub": "Düşük hücreler gösterilmez. Günü değiştirmek için bir çubuk seçin.",
+    "tableTitle": "En riskli yerleşimler",
+    "tableSub": "10 km içindeki hücrelerin ortalama puanı. Vatandaş görünümünde açmak için bir satır seçin.",
+    "thPlace": "Yerleşim",
+    "thClass": "Sınıf",
+    "thScore": "Puan ▼",
+    "modelTitle": "Model ve veri",
+    "m1": "ROC-AUC (2025 test yılı)",
+    "m1n": "Yalnız FWI 0,669 · lojistik regresyon 0,881",
+    "m2": "Riskin ilk %5’inde yakalanan yangınlar",
+    "m2n": "Yalnız FWI %14,6",
+    "m3": "PR-AUC",
+    "m3n": "Yangınlar çok nadir olduğu için düşük görünür; ROC-AUC ile birlikte okuyun.",
+    "method": "Puanlama yöntemi",
+    "methodText": "Tüm Türkiye’de VIIRS yangın tespitleriyle eğitilmiş LightGBM (0,05° hücreler, 2021–2025): hareketli ortalamalarıyla FWI ve alt indeksleri, yollara, yerleşimlere ve tarım alanlarına uzaklık, hücrenin yangın geçmişi, arazi örtüsü, yükselti ve eğim. FWI sınıfı sınırlar; yangın havası düşük bir günde aşırı risk gösterilemez.",
+    "sources": "Veri kaynakları",
+    "sourceList": [
+      "Copernicus EMS / EFFIS — Yangın Hava İndeksi",
+      "Open-Meteo — 7 günlük hava",
+      "NASA FIRMS (VIIRS) — yangın etiketleri ve aktif yangınlar",
+      "OpenStreetMap — yollar, yerleşimler",
+      "ESA WorldCover · Copernicus DEM · OGM yangın geçmişi"
+    ],
+    "limits": "Sınırlamalar",
+    "limitList": [
+      "Uydular küçük ve kısa yangınları kaçırır",
+      "5–7. günler daha az güvenilir",
+      "Resmî OGM uyarısı değildir"
+    ]
+  },
+  "reports": {
+    "title": "Sahadan gelen ihbarlar",
+    "lede": "Türkiye’nin her yerinden gelen ihbarlar; en acil ve en iyi doğrulanmış olanlar en üstte.",
+    "demoNote": "Başlangıçtaki ihbarlar demo örnekleridir. Bu cihazdan gönderdiğiniz ihbarlar da eklenir ve sıralanır.",
+    "filterAll": "Tümü",
+    "filterEmergency": "Acil",
+    "filterVerified": "Doğrulanmış",
+    "filterPending": "Kontrol gerekiyor",
+    "filterMine": "Bu cihazdan",
+    "sortLabel": "Sırala",
+    "sortPriority": "Öncelik",
+    "sortNewest": "En yeni",
+    "sortVerified": "En çok doğrulanan",
+    "count": "{n} ihbar",
+    "types": {
+      "flames": "Alev",
+      "smoke": "Duman",
+      "spark": "Elektrik hattı kıvılcımı",
+      "stubble": "Anız yakma",
+      "litter": "Cam veya çöp"
+    },
+    "priority": "öncelik",
+    "emergency": "Acil",
+    "verified": "Doğrulanmış",
+    "likely": "Büyük olasılıkla gerçek",
+    "unverified": "Kontrol gerekiyor",
+    "mine": "Sizin ihbarınız",
+    "verification": "Doğrulama",
+    "urgency": "Aciliyet",
+    "checks": {
+      "photo": "Fotoğraf veya video eklendi",
+      "gps": "Fotoğraf GPS’i yerle eşleşiyor",
+      "time": "Fotoğraf saati ihbarla eşleşiyor",
+      "unique": "Yeniden paylaşılmış bir fotoğraf değil",
+      "ai": "Yapay zekâ duman veya alev görüyor ({p})",
+      "trust": "İhbarcı güveni {p}",
+      "corroborated": "Yakında {n} başka ihbar",
+      "satellite": "5 km içinde uydu ısı tespiti (NASA FIRMS)"
+    },
+    "whyTitle": "Neden bu sırada",
+    "why": {
+      "type": "{type} bildirildi",
+      "risk": "buradaki model riski {level}",
+      "recent": "{ago} gönderildi",
+      "town": "{town}’a {km} km",
+      "checks": "8 kontrolden {n}’i geçti"
+    },
+    "showOnMap": "Haritada göster",
+    "call": "112’yi ara",
+    "remove": "Kaldır",
+    "unknownPlace": "İhbarcının yazdığı yer: {text}",
+    "noLocation": "Harita konumu yok",
+    "empty": "Bu filtreye uyan ihbar yok.",
+    "howTitle": "Sıralama nasıl yapılıyor",
+    "howList": [
+      "Öncelik = %60 aciliyet + %40 doğrulama; her biri 0–100 puan.",
+      "Aciliyet: ne görüldüğü (alev > duman > kıvılcım > anız > çöp), o noktadaki model yangın riski, yerleşime yakınlık ve ne kadar yeni olduğu.",
+      "Doğrulama: fotoğraf eklenmesi, fotoğrafın GPS ve saat uyumu, yeniden paylaşılmamış olması, yapay zekâ duman/alev kontrolü, ihbarcının geçmişi, yakındaki diğer ihbarlar ve NASA FIRMS uydu ısı tespiti.",
+      "Acil = alev veya duman, en az ‘Büyük olasılıkla gerçek’, son 3 saat içinde gönderilmiş.",
+      "Fotoğraf kontrolü çalıştığında, güven puanı (EXIF, yeniden paylaşım kontrolü, duman/alev tespiti, yapay zekâ görüntü denetimi, hava ve uydu) sitenin tahmininin yerini alır."
+    ],
+    "ago": "{t}",
+    "quarantined": "Fotoğraf kontrolünde bekletiliyor",
+    "photoCheck": "Fotoğraf kontrolü: {badge} · {score}/100",
+    "badges": {
+      "green": "yeşil",
+      "amber": "sarı",
+      "quarantined": "karantinada"
+    }
+  },
+  "reportDialog": {
+    "title": "Duman veya yangın bildirin ya da yardım isteyin",
+    "callFirst": "Şu an görülen bir yangın mı? Önce <b>112</b>’yi arayın",
+    "s1": "Fotoğraf veya video ekleyin",
+    "dropBig": "Fotoğrafı veya videoyu buraya bırakın",
+    "dropSmall": "ya da kamerayla çekmek için dokunun",
+    "fileHint": "JPG · PNG · MP4 · MOV · konum fotoğraftan okunur",
+    "fileAdded": "Eklendi: {name} ({kb} KB)",
+    "noFile": "Dosya seçilmedi",
+    "s2": "Ne gördünüz?",
+    "s3": "Nerede?",
+    "useGps": "Konumumu kullan",
+    "typeAddress": "Adres yaz",
+    "chooseLoc": "Konumu nasıl paylaşacağınızı seçin.",
+    "finding": "Konumunuz bulunuyor…",
+    "yourLoc": "Konumunuz · {lat}° K, {lon}° D",
+    "locBlocked": "Konum izni yok. Köyü veya yolu yazın.",
+    "noGeo": "Konum kullanılamıyor. Yeri yazın.",
+    "addressLabel": "Köy, yol veya belirgin bir yer",
+    "addressHint": "Köyü, yolu veya belirgin bir yeri yazın.",
+    "s4": "Adınız ve telefonunuz",
+    "s4note": "(isteğe bağlı, yalnızca muhtar görür)",
+    "name": "Ad",
+    "phone": "Telefon",
+    "submit": "İhbarımı kontrol et ve komşuları uyar",
+    "privacy": "Demoda adınız ve telefonunuz bu cihazda kalır. İhbarlar İhbarlar sayfasında sıralanır.",
+    "needType": "Gördüğünüz en az bir şeyi seçin.",
+    "needPlace": "Komşuların nerede olduğunu bilmesi için bir konum ekleyin.",
+    "sent": "İhbar eklendi ve {n} ihbar içinde #{rank} sıraya yerleşti.",
+    "seeIt": "Gör",
+    "verifying": "Fotoğrafınız kontrol ediliyor…",
+    "verifyResult": "Fotoğraf kontrolü: {badge} ({score}/100)",
+    "verifyFailed": "Fotoğraf kontrolüne ulaşılamadı. İhbarınız kaydedildi ve “Kontrol gerekiyor” olarak işaretlendi."
+  },
+  "shareDialog": {
+    "title": "Yangın riskini paylaş",
+    "text": "{place} · {level} tehlike. Komşularınız bilsin diye köy grubunuza gönderin.",
+    "sms": "SMS",
+    "copy": "Bağlantıyı kopyala",
+    "more": "Diğer uygulamalar…",
+    "copied": "Bağlantı kopyalandı",
+    "copyFail": "Kopyalanamadı. Adres çubuğundan kopyalayın."
+  },
+  "landing": {
+    "nav": {
+      "map": "Canlı harita",
+      "danger": "Tehlike düzeyleri",
+      "report": "İhbar",
+      "help": "Destek",
+      "learn": "Öğren"
+    },
+    "reportBtn": "Yangın bildir",
+    "kicker": "ORMAN YANGINI ÖNLEME · ANTALYA VE ORTA KALİMANTAN",
+    "lede": "Bugünkü yangın riskini öğren. Ne yapacağını bil. Ormanın yeniden yeşermesine yardım et.",
+    "seeRisk": "Bugünkü riski gör",
+    "mapEyebrow": "CANLI HARİTA",
+    "mapTitle": "Yakınındaki yangın riski, her gün",
+    "mapLede": "Modelimiz Türkiye’deki her 5 km’lik kareyi her gün hava, kuru bitki örtüsü ve geçmiş yangınlara göre puanlıyor. Rengini ve ne yapacağını görmek için yerleşiminizi seçin.",
+    "highestToday": "EN RİSKLİ YERLEŞİM · {date}",
+    "openMap": "Canlı haritayı aç",
+    "seeData": "Arkasındaki veriyi gör",
+    "dangerEyebrow": "4 TEHLİKE DÜZEYİ",
+    "dangerTitle": "Her renk ne demek, ne yapmalı",
+    "dangerLede": "Her köy için tek ve basit bir ölçek, doğrudan modelden. Renk, bugün bir yangının ne kadar kolay başlayıp yayılacağını; kart da ne yapmanız gerektiğini söyler.",
+    "reportEyebrow": "İHBAR",
+    "reportTitle": "Duman veya yangın riski mi gördünüz? Komşularınıza haber verin.",
+    "reportLede": "Fotoğrafınız kontrol edilir, diğer tüm ihbarlarla birlikte sıralanır ve ihbar haritasında gösterilir.",
+    "callFirst": "Acil mi? Önce 112’yi arayın",
+    "otherChannels": "İnternet uygulaması yok mu? Şununla bildirin:",
+    "verifiedEyebrow": "TOPLULUK TARAFINDAN DOĞRULANIR",
+    "verifiedTitle": "Her ihbar, aciliyetine göre sıralı",
+    "verifiedLede": "Türkiye’nin her yerinden gelen ihbarlar kontrol edilip sıralanır; böylece en acil ve en iyi doğrulanmış olanlar önce görülür.",
+    "seeReports": "Tüm ihbarları gör",
+    "helpEyebrow": "NASIL DESTEK OLABİLİRSİNİZ",
+    "helpTitle": "Nerede olursanız olun bir ormanı koruyun",
+    "helpLede": "Bağış yapın, gönüllü olun ya da paylaşın. Küçük adımlar, yangınları ilk durduran köylere ulaştığında büyür.",
+    "raised": "{r} toplandı",
+    "ofGoal": "{g} hedefin · {n} bağışçı",
+    "donate": "{a} bağışla",
+    "donateDemo": "Bu demoda bağışlar henüz bağlı değil.",
+    "projects": [
+      {
+        "loc": "TÜRKİYE · ANTALYA",
+        "title": "Yangına dayanıklı fidanlar ve devriye ekipmanı",
+        "text": "Köy kenarlarında geniş yapraklı tampon şeritler (keçiboynuzu, meşe, defne), Muhtar devriyeleri için telsiz ve pompalar."
+      },
+      {
+        "loc": "ENDONEZYA · ORTA KALİMANTAN",
+        "title": "Orangutan yaşam alanı ve turbalığın yeniden ıslatılması",
+        "text": "Topluluk kanal setleri Sebangau turbalığını ıslak tutar ve orangutanların yaşadığı ormanı korur."
+      },
+      {
+        "loc": "TÜRKİYE · MUĞLA",
+        "title": "Sıfır cam patika setleri",
+        "text": "Likya ve Karya yolu başlangıçlarında şişe iade kutuları ve temizlik setleri; cam asla yangın başlatmasın."
+      }
+    ],
+    "regrownEyebrow": "YENİDEN YEŞEREN",
+    "regrownTitle": "Çam Kozalağı ve Turbalık, Yeniden Yeşeriyor",
+    "regrownLede": "Ormana birlikte sahip çıkarsak yangından sonra ne olur — ve ormanları yanmaya iten nedir.",
+    "tabGoals": "Hedeflerimiz",
+    "tabLearnTr": "Öğren: Türkiye",
+    "tabLearnId": "Öğren: Endonezya",
+    "goals": [
+      [
+        "10.000",
+        "fidan dikildi"
+      ],
+      [
+        "40",
+        "kanal seti kuruldu"
+      ],
+      [
+        "60",
+        "köy günlük uyarı alıyor"
+      ]
+    ],
+    "goalsNote": "2026 pilot hedefleri.",
+    "plantTree": "Fidan dik",
+    "plantDemo": "Fidan dikimi kaydı pilotla birlikte açılacak.",
+    "learnIntro": "Herkesin bir dakikada okuyabileceği kısa bilgiler. Ayrıntılar ve kaynak için “Daha fazla” düğmesine dokunun.",
+    "footerAbout": "COP31 Antalya için Türkiye’deki Endonezyalı öğrenciler tarafından yapıldı.",
+    "footerEmergency": "ACİL DURUMDA",
+    "footerTr": "Türkiye: arayın",
+    "footerId": "Endonezya: {n}’yi veya yerel BPBD ofisini arayın",
+    "footerData": "VERİ KAYNAKLARI",
+    "footerDisclaimer": "Önleme planlaması için model tahmini — resmî yangın uyarısı değildir."
+  },
+  "learn": {
+    "more": "Daha fazla",
+    "source": "Kaynak",
+    "twigLabels": [
+      "Çok ince · 0,3 cm altı",
+      "İnce · 0,3–0,6 cm",
+      "Orta · 0,6–1 cm",
+      "Kalın · 1–2,5 cm"
+    ],
+    "riauLegend": {
+      "nonforest": "Ormanı zaten kesilmiş",
+      "forest": "Orman",
+      "acacia": "Akasya plantasyonu",
+      "cloud": "Bulut altında"
+    },
+    "tr": [
+      {
+        "id": "redpine",
+        "icon": "🌲",
+        "title": "Kızılçam: Türkiye’nin ana yangın ağacı",
+        "simple": "Yapışkan reçinesi ve kuru iğneleri çok sıcak yanar.",
+        "num": "%59,6",
+        "numLabel": "2021’in en büyük 30 yangınında yanan alanın saf kızılçam ormanı olan kısmı",
+        "more": "Kızılçam, yangınların çoğunun başladığı Ege’den Akdeniz’e uzanan sıcak kıyı kuşağını kaplar. Yangından sonra kozalakları tohum döker ve genç ağaçlar yeniden büyür. Bu yangına dayanmak değil, yeniden toparlanmaktır."
+      },
+      {
+        "id": "blackpine",
+        "icon": "⛰️",
+        "title": "Karaçam kendini toparlayamaz",
+        "simple": "Yangınları eskiden yerde kalırdı. Artık tepelere tırmanıyor ve ağaçlar tamamen ölüyor.",
+        "num": "4 milyon+ ha",
+        "numLabel": "Türkiye’deki karaçam ormanı",
+        "more": "2021’de en büyük yangınlarda yanan alanın %7,67’si (12.811 ha) karaçamdı. Tepe yangınlarına uyumu olmadığı için yanan meşcereler kendiliğinden yenilenmez."
+      },
+      {
+        "id": "maquis",
+        "icon": "🌿",
+        "title": "Maki, ateşin tırmandığı merdivendir",
+        "simple": "Çamların altındaki alçak çalılar yer yangınını ağaç tepelerine taşır.",
+        "num": "6 milyon ha",
+        "numLabel": "maki — Türkiye orman arazisinin yaklaşık %30’u",
+        "more": "Yaygın maki bitkileri: kermes meşesi, laden (Cistus), sandal ağacı, sakız ağacı (Pistacia lentiscus) ve akça kesme (Phillyrea). Yol ve köy kenarlarında temizlenmeleri merdiveni kırar."
+      },
+      {
+        "id": "twigs",
+        "icon": "🔥",
+        "title": "İnce dallar önce tutuşur",
+        "simple": "Dal ne kadar inceyse o kadar çabuk kurur ve yanar.",
+        "visual": "twigs",
+        "more": "Bilim insanları ağacın tepe yakıtını kalınlığa göre sınıflandırır. Çok ince dallar (3 mm altı) alevi en hızlı taşır; kuru bir çam tepesinin saniyeler içinde tutuşmasının nedeni budur."
+      },
+      {
+        "id": "stands",
+        "icon": "🌳",
+        "title": "Her orman aynı yanmaz",
+        "simple": "Çalılarla dolu açık ormanlar, sık çam meşcereleri, okaliptüs ve geniş yapraklı ormanlar yangında farklı davranır.",
+        "more": "Okaliptüs yaprakları yağ doludur ve son derece yanıcıdır. Meşe, keçiboynuzu ve defne gibi geniş yapraklılar sıklıkla köy kenarlarına yeşil yangın şeridi olarak dikilir."
+      },
+      {
+        "id": "rows",
+        "icon": "📏",
+        "title": "Aynı yaştaki çam sıraları = tek büyük yakıt yatağı",
+        "simple": "Tek tür ve aynı yaştaki dev çam plantasyonları ateşe kesintisiz bir yol verir.",
+        "more": "Akdeniz’deki büyük çam plantasyonları, yanıcılığı ve yangın tehlikesini artıran kesintisiz, aynı yaşlı meşcereler oluşturdu. Tür ve yaş karışımı bu yolu böler."
+      },
+      {
+        "id": "season",
+        "icon": "📅",
+        "title": "Yangın sezonu uzuyor",
+        "simple": "Yangınların çoğu mayıs–kasım arasında olur; risk artık sonbahara ve ilkbahar başına uzanıyor.",
+        "num": "%85",
+        "numLabel": "orman yangınlarının mayıs–kasım arasında çıkan kısmı",
+        "more": "Uzmanlar, kuru ve rüzgârlı havada yangınların artık mart–nisan gibi erken başlayıp ekim–kasıma kadar sürebileceği konusunda uyarıyor."
+      },
+      {
+        "id": "vulnerable",
+        "icon": "🗺️",
+        "title": "Ormanlarımızın çoğu risk altında",
+        "simple": "Her üç hektar ormandan yaklaşık ikisi yangına karşı çok hassas.",
+        "num": "~%65",
+        "numLabel": "Türkiye ormanlarının (yaklaşık 15 milyon ha) çok hassas olan kısmı",
+        "more": "Günlük risk haritaları ve sahadaki insanların erken ihbarları bu yüzden çok önemli."
+      }
+    ],
+    "id": [
+      {
+        "id": "peat",
+        "icon": "💧",
+        "title": "Islak turba yanmaz. Kurutulmuş turba yanar.",
+        "simple": "Turba, eski ve ıslak bitki kalıntısıdır. Suyu çekilince yakıt gibi kurur ve haftalarca toprak altında için için yanabilir.",
+        "num": "24 milyon ha’nın 16’sı",
+        "numLabel": "Endonezya turbalığının tahribat nedeniyle yangına daha yatkın hâle gelen kısmı (Pantau Gambut tahmini, 2026)",
+        "more": "Turba yangınları yoğun, dumanlı pus oluşturur. Drenaj kanallarını kapatmak turbayı ıslak tutar, böylece yanamaz."
+      },
+      {
+        "id": "idle",
+        "icon": "🏚️",
+        "title": "Yangınlar “arada kalan” arazide çıkar",
+        "simple": "Yangınların çoğu ne ormanda ne de plantasyonda; ekilmeyi bekleyen, temizlenmiş ve kurutulmuş arazide.",
+        "num": "%76",
+        "numLabel": "2019’da (yedi ilde) yanan alanın boş arazi olan kısmı",
+        "more": "Yanan alanın yalnızca %3’ü palmiye yağı plantasyonlarının içinde, %0,4’ü akasya, kauçuk veya pirinç tarlalarındaydı. Plantasyonlarda yakılan ateş çevredeki kuru boş araziye kolayca yayılabilir."
+      },
+      {
+        "id": "riau",
+        "icon": "📊",
+        "title": "2013 Riau yangınları tek bir çubukta",
+        "simple": "Yanan arazinin çoğu ormanını zaten kaybetmişti.",
+        "visual": "riau",
+        "num": "163.336 ha",
+        "numLabel": "Haziran 2013’te bir haftada yandı; %84’ü turbalıktı",
+        "more": "Ormanı zaten kesilmiş olup yanan arazinin %57’si çalı ve çıplak topraktı, %31’i genç palmiye, %7’si olgun palmiyeydi. Yangınlar normalden yağışlı bir yılda, yalnızca iki kurak aydan sonra çıktı."
+      },
+      {
+        "id": "tusam",
+        "icon": "🌲",
+        "title": "Ekvatoru geçen çam",
+        "simple": "Sumatra çamı (tusam) Endonezya’nın kendi çamı; Türkiye’nin çamları gibi reçineli iğneleri sıcak yanar.",
+        "more": "Java ve Sulawesi’de yaygın olarak dikilir. Bir çalışma, reçine alma yaralarının ve ağaç çapının yangın şiddetini etkileyebileceğinden şüpheleniyor."
+      },
+      {
+        "id": "east",
+        "icon": "🌾",
+        "title": "2026: yangınlar kuru doğuya kaydı",
+        "simple": "Bu yıl Nusa Tenggara’daki kuru savanlar çok yandı.",
+        "num": "178.232 ha",
+        "numLabel": "Ocak–Haziran 2026’da Endonezya’da yandı — Bali ve Nusa Tenggara’nın payı %18,7",
+        "more": "Nusa Tenggara’da en çok yanan örtü savandır. Mutis ormanında yanan alanlarda yangına dayanıklı Eucalyptus urophylla baskındır."
+      },
+      {
+        "id": "gelam",
+        "icon": "🌳",
+        "title": "Çok sık yanarsa orman değişir",
+        "simple": "Tekrarlanan yangınlar uzun bataklık ormanını gelam çalılıklarına ve çayıra çevirir.",
+        "more": "Gelam (Melaleuca cajuputi) yangından sağ çıkar; bu yüzden birçok yangından sonra baskın hâle gelir ve asıl bataklık ormanı geri dönmez."
+      },
+      {
+        "id": "alang",
+        "icon": "🌱",
+        "title": "Ateşi canlı tutan ot",
+        "simple": "Alang-alang otu yanmış araziyi ele geçirir, sonra tekrar tekrar yanar.",
+        "more": "Tekrarlanan yangınlar alang-alangdan (Imperata cylindrica) uzun bitkileri yok eder; ot hâkimiyetini korur ve ağaçlar geri dönemez."
+      }
+    ]
+  }
+}

@@ -1,0 +1,66 @@
+/* Design tokens.
+   1) Palette — mirrors the Figma variable collection "BizdenBize tokens" (brand/*, neutral/*, risk/*).
+   2) Semantic tokens — what components use. Light is the default; dark overrides below.
+   Theme is set on <html data-theme="light|dark"> (falls back to the OS setting). */
+:root {
+  /* palette (Figma) */
+  --brand-navy: #21293a; --brand-navy-2: #293448; --brand-steel: #5678a8; --brand-coral: #f4646e;
+  --neutral-white: #ffffff; --neutral-ink: #21293a; --neutral-muted: #5b6577; --neutral-soft: #8a93a3;
+  --neutral-line: #e3e7ee; --neutral-bg: #f4f6f9; --neutral-cream: #f7f4ee;
+  --risk-low: #22c55e; --risk-moderate: #eab308; --risk-high: #f97316; --risk-extreme: #ef4444;
+  --risk-on-low: #052e16; --risk-on-moderate: #1c1917; --risk-on-high: #1c1917; --risk-on-extreme: #ffffff;
+  --action-green: #16a34a;
+
+  /* semantic — light */
+  --bg: var(--neutral-bg);
+  --surface: #ffffff;
+  --surface-2: #eef1f6;
+  --surface-cream: var(--neutral-cream);
+  --text: var(--neutral-ink);
+  --text-muted: var(--neutral-muted);
+  --text-soft: var(--neutral-soft);
+  --border: var(--neutral-line);
+  --accent: var(--brand-steel);
+  --chrome: var(--brand-navy);          /* landing nav, hero, footer */
+  --chrome-2: var(--brand-navy-2);
+  --on-chrome: #ffffff;
+  --on-chrome-muted: #c9d1de;
+  --primary-bg: var(--brand-navy); --primary-fg: #ffffff;
+  --banner-bg: #fff7d6; --banner-fg: #6b5300;
+  --danger-bg: #fff1f2; --danger-fg: #be123c;
+  --ok-bg: #ecfdf3; --ok-border: #bbf7d0;
+  --selected-row: #eef4ff;
+  --tint-mix: #ffffff;                   /* what risk colours are mixed with for soft fills */
+  --shadow-pop: 0 8px 24px rgba(15, 23, 42, .18);
+  color-scheme: light;
+
+  --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --radius-pill: 999px; --radius-card: 16px; --radius-sm: 10px;
+  --page-max: 1440px; --gutter: 24px;
+}
+
+/* dark — used when the person picks dark, or when they haven't picked and the OS is dark */
+:root[data-theme="dark"] {
+  --bg: #0f141d;
+  --surface: #171e2b;
+  --surface-2: #222b3b;
+  --surface-cream: #1b1f27;
+  --text: #e8ecf3;
+  --text-muted: #a9b3c4;
+  --text-soft: #7f8a9d;
+  --border: #2c3647;
+  --accent: #8fb0e0;
+  --chrome: #0b1019;
+  --chrome-2: #1a2232;
+  --on-chrome-muted: #9aa6ba;
+  --primary-bg: #e8ecf3; --primary-fg: #121826;
+  --banner-bg: #3a3210; --banner-fg: #f5e2a1;
+  --danger-bg: #3a1620; --danger-fg: #fda4af;
+  --ok-bg: #12301f; --ok-border: #1f5134;
+  --selected-row: #1f2c45;
+  --tint-mix: #171e2b;
+  --shadow-pop: 0 8px 24px rgba(0, 0, 0, .5);
+  color-scheme: dark;
+}
+
+@media (max-width: 600px) { :root { --gutter: 16px; } }

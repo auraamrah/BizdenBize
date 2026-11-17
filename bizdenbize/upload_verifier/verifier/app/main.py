@@ -2,6 +2,7 @@
 import asyncio, os, shutil, tempfile, time
 
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
 
 from .frames import extract_flow_pair, extract_keyframes, is_video
 from .gates.cv import cv_gate
@@ -12,6 +13,12 @@ from .scoring import trust_score
 from .store import add_hashes
 
 app = FastAPI(title="BizdenBize Verifier")
+
+# Let the website (web/, GitHub Pages) call /verify from the browser.
+# Override with ALLOWED_ORIGINS="https://a.example,https://b.example".
+ALLOWED_ORIGINS = [o.strip() for o in os.environ.get(
+    "ALLOWED_ORIGINS", "https://auraamrah.github.io,http://localhost:8080,http://127.0.0.1:8080").split(",") if o.strip()]
+app.add_middleware(CORSMiddleware, allow_origins=ALLOWED_ORIGINS, allow_methods=["GET", "POST"], allow_headers=["*"])
 MAX_BYTES = 50 * 1024 * 1024
 
 
