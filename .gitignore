@@ -1,2 +1,11 @@
 /data
 /Framework FireBridge.pdf
+/api
+/.venv
+/labels
+/models/*
+!/models/fire_lgbm_turkiye.joblib
+!/models/metrics_turkiye.csv
+/.env
+/.claude
+/False Info Predictor.pdf
