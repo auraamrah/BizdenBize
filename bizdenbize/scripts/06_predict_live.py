@@ -216,3 +216,10 @@ dash = {
 }
 OUT.write_text(json.dumps(dash, separators=(",", ":"), ensure_ascii=False), encoding="utf-8")
 log(f"{OUT.name}: {OUT.stat().st_size // 1024} KB, days {dash['meta']['dates'][0]}..{dash['meta']['dates'][-1]}")
+
+# website data (web/data/live.json): same output, compacted for phones. Never fails the forecast.
+try:
+    import web_export
+    web_export.export(OUT, web_export.ROOT / "web/data/live.json")
+except Exception as e:
+    log(f"web export skipped: {e}")

@@ -349,3 +349,10 @@ dash_path.write_text(json.dumps(dash, separators=(",", ":"), ensure_ascii=False)
     ensure_ascii=False), encoding="utf-8")
 log(f"data.json: {dash_path.stat().st_size // 1024} KB | cells {NC} | roads {len(road_json)} | "
     f"settlements {len(settlements)}")
+
+# website data (web/data/hindcast.json): the 2021 hindcast, compacted for phones. Never fails training.
+try:
+    import web_export
+    web_export.export(dash_path, web_export.ROOT / "web/data/hindcast.json")
+except Exception as e:
+    log(f"web export skipped: {e}")
