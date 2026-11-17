@@ -1,0 +1,597 @@
+{
+  "meta": {
+    "name": "English",
+    "short": "EN",
+    "locale": "en-GB"
+  },
+  "common": {
+    "brandSub": "Forest fire risk",
+    "citizen": "Citizen",
+    "citizenLong": " view",
+    "science": "Science",
+    "scienceLong": " view",
+    "reports": "Reports",
+    "language": "Language",
+    "themeToLight": "Switch to light mode",
+    "themeToDark": "Switch to dark mode",
+    "dataset": "Dataset",
+    "datasetLive": "Live forecast",
+    "datasetHindcast": "Hindcast · 27 Jul – 2 Aug 2021",
+    "bannerLabel": "Model forecast",
+    "bannerLive": "BizdenBize model run {time}. Not an official OGM warning. In an emergency call 112.",
+    "bannerHindcast": "Replay of the 2021 megafire week, scored by the model without seeing 2021. Not a live forecast.",
+    "bannerStale": "This forecast is more than 36 hours old. Check OGM for today’s warnings.",
+    "loadError": "Couldn’t load the risk data ({file}). Reload the page; if it keeps failing the daily model run may not have been published yet.",
+    "footerLeft": "#BizdenBize · COP31 Climate Tech Creathon · Antalya 2026",
+    "footerRight": "Model: LightGBM on EFFIS/Copernicus FWI · Open-Meteo · NASA FIRMS · OpenStreetMap · ESA WorldCover · OGM",
+    "close": "Close",
+    "today": "Today",
+    "population": "pop. {n}",
+    "mapAttribution": "Risk: BizdenBize model"
+  },
+  "levels": {
+    "low": {
+      "name": "Low",
+      "tag": "NORMAL ACTIVITY",
+      "meaning": "A fire would start with difficulty and spread slowly.",
+      "todo": [
+        "Enjoy the forest",
+        "Plan field work as normal"
+      ]
+    },
+    "moderate": {
+      "name": "Moderate",
+      "tag": "BE CAREFUL",
+      "meaning": "A fire can start. Dry grass catches easily.",
+      "todo": [
+        "Light fires only in fixed barbecue places",
+        "No burning of stubble or garden waste"
+      ]
+    },
+    "high": {
+      "name": "High",
+      "tag": "NO OUTDOOR FIRE",
+      "meaning": "Fires start easily and spread fast.",
+      "todo": [
+        "No barbecue and no campfire anywhere",
+        "No fire outdoors at all, not even for tea"
+      ]
+    },
+    "extreme": {
+      "name": "Extreme",
+      "tag": "STAY OUT OF THE FOREST",
+      "meaning": "A fire would be very hard to stop.",
+      "todo": [
+        "Stay out of the forest today",
+        "Do not use machines that can make sparks"
+      ]
+    },
+    "scoreLabel": "model score"
+  },
+  "actions": {
+    "farmer": {
+      "low": [
+        "Plan field work as normal",
+        "Do not burn stubble; plough it in instead",
+        "Keep a water barrel and a shovel at the field"
+      ],
+      "moderate": [
+        "Work machines in the morning, not the hot afternoon",
+        "No burning of stubble or garden waste",
+        "Keep a water barrel and a shovel at the field"
+      ],
+      "high": [
+        "Stop harvesting with machines that spark",
+        "No fire outdoors at all",
+        "Clear dry grass 10 m around buildings"
+      ],
+      "extreme": [
+        "Stop all field work near the forest",
+        "Do not use machines that can make sparks",
+        "Know your village evacuation route"
+      ]
+    },
+    "visitor": {
+      "low": [
+        "Enjoy the forest",
+        "Use only fixed barbecue places",
+        "Take your glass and litter home"
+      ],
+      "moderate": [
+        "Barbecue only in fixed places",
+        "Never throw cigarettes from cars",
+        "Take your glass and litter home"
+      ],
+      "high": [
+        "No barbecue and no campfire anywhere",
+        "Park only on gravel or asphalt",
+        "Save 112 in your phone"
+      ],
+      "extreme": [
+        "Stay out of the forest today",
+        "Pick a beach or town plan instead",
+        "If you see smoke, call 112 first"
+      ]
+    },
+    "volunteer": {
+      "low": [
+        "Join a trail clean-up this week",
+        "Check the village fire kit",
+        "Share today’s colour with your group"
+      ],
+      "moderate": [
+        "Check the village fire kit",
+        "Remind neighbours: no stubble burning",
+        "Share today’s colour with your group"
+      ],
+      "high": [
+        "Join the evening watch rota",
+        "Keep your phone charged and on",
+        "Share today’s colour with your group"
+      ],
+      "extreme": [
+        "Follow the Muhtar’s instructions",
+        "Help older neighbours be ready to leave",
+        "Do not fight a fire yourself — call 112"
+      ]
+    }
+  },
+  "live": {
+    "searchLabel": "Search a town or village",
+    "searchPlaceholder": "Search a town or village",
+    "nearMe": "Near me",
+    "suggested": "BIGGEST TOWNS",
+    "matching": "MATCHING PLACES",
+    "noMatch": "No town called “{q}” in the model’s list. Tap the map instead.",
+    "fireRisk": "FIRE RISK",
+    "score": "SCORE {s}",
+    "danger": "{level} DANGER",
+    "mean10": "Mean of the model cells within 10 km of the town centre.",
+    "pointNote": "Model cell of about 5 km around this spot.",
+    "spotName": "Spot near {town}",
+    "spotNameNone": "Selected spot",
+    "weatherNow": "Live weather now · {place}",
+    "weatherBy": "Open-Meteo · {time}",
+    "weatherTitle": "Live weather",
+    "weatherHindcast": "Not shown for the 2021 replay",
+    "weatherError": "Couldn’t reach Open-Meteo. Check your connection and reload.",
+    "loading": "Loading…",
+    "temp": "Temperature",
+    "humidity": "Humidity",
+    "wind": "Wind",
+    "next7": "NEXT 7 DAYS",
+    "days7": "THE 7 DAYS",
+    "whatToDo": "WHAT YOU CAN DO",
+    "roles": {
+      "farmer": "Farmer",
+      "visitor": "Visitor",
+      "volunteer": "Volunteer"
+    },
+    "listen": "Listen",
+    "share": "Share",
+    "whatsapp": "WhatsApp",
+    "callSmoke": "See smoke? Call",
+    "dataBehind": "See the data behind this →",
+    "mapHint": "Tap the map to check any spot.",
+    "showLow": "Show low-risk cells",
+    "showFires": "Active fires (NASA FIRMS)",
+    "showTowns": "Towns",
+    "coloursLink": "What the colours mean",
+    "dropTitle": "Seen smoke or a fire risk? Add a photo or video",
+    "dropText": "Drop it here or tap to use your camera. We read the place and time from the photo.",
+    "sendReport": "Send report",
+    "guideTitle": "What the colours mean",
+    "guideSub": "One simple scale, the same everywhere in Türkiye.",
+    "todayBadge": "TODAY",
+    "spoken": "Fire risk in {place} is {level}. {meaning} {first}.",
+    "waText": "Fire risk in {place}: {level} ({tag}). {meaning} — #BizdenBize: {url}",
+    "toastFinding": "Finding your location…",
+    "toastUsing": "Using your location — nearest town: {town}",
+    "toastBlocked": "Location blocked. Search for your town instead.",
+    "toastNoGeo": "Location isn’t available in this browser.",
+    "toastOutside": "You’re outside the model area. Showing the nearest town: {town}",
+    "toastReading": "Reading the fire risk aloud…",
+    "toastNoSpeech": "This browser can’t read text aloud.",
+    "firePopup": "Satellite heat detection (NASA FIRMS VIIRS), {date}"
+  },
+  "science": {
+    "title": "Science view",
+    "kpiModerate": "Cells at Moderate or above",
+    "kpiModerateNote": "{date} · of {n} land cells",
+    "kpiHigh": "Cells at High or Extreme",
+    "kpiHighNote": "{share} of land",
+    "kpiFwi": "Mean FWI (all land)",
+    "kpiFwiNote": "maximum {max}",
+    "kpiFires": "Active fires (satellite)",
+    "kpiFiresNote": "NASA FIRMS VIIRS, last run",
+    "layerClass": "Risk class",
+    "layerScore": "Risk score",
+    "layerFwi": "Fire Weather Index",
+    "cellDetail": "Cell detail",
+    "clickCell": "Click any cell on the map to see why it scores what it does.",
+    "score": "Risk score",
+    "fwi": "Fire Weather Index (FWI)",
+    "coords": "Coordinates",
+    "nearestTown": "Nearest town",
+    "drivers": "WHAT DRIVES THE SCORE (SHARE OF SHAP)",
+    "groups": {
+      "weather": "Weather & drought",
+      "human": "Human access",
+      "history": "Fire history",
+      "environment": "Land cover & terrain"
+    },
+    "chartTitle": "Cells at Moderate or above, by day",
+    "chartSub": "Low cells are not shown. Select a bar to switch day.",
+    "tableTitle": "Highest-risk settlements",
+    "tableSub": "Mean score of cells within 10 km. Select a row to open it in the citizen view.",
+    "thPlace": "Settlement",
+    "thClass": "Class",
+    "thScore": "Score ▼",
+    "modelTitle": "Model and data",
+    "m1": "ROC-AUC (2025 test year)",
+    "m1n": "FWI alone 0.669 · logistic regression 0.881",
+    "m2": "Fires caught in top 5 % of risk",
+    "m2n": "FWI alone 14.6 %",
+    "m3": "PR-AUC",
+    "m3n": "Looks low because fires are very rare; read it with the ROC-AUC.",
+    "method": "Scoring method",
+    "methodText": "LightGBM trained on VIIRS fire detections across all of Türkiye (0.05° cells, 2021–2025): FWI and sub-indices with rolling means, distance to roads, settlements and farmland, cell fire history, land cover, elevation and slope. FWI caps the class, so a day with low fire weather can’t show extreme risk.",
+    "sources": "Data sources",
+    "sourceList": [
+      "Copernicus EMS / EFFIS — Fire Weather Index",
+      "Open-Meteo — 7-day weather",
+      "NASA FIRMS (VIIRS) — fire labels and active fires",
+      "OpenStreetMap — roads, settlements",
+      "ESA WorldCover · Copernicus DEM · OGM fire history"
+    ],
+    "limits": "Limitations",
+    "limitList": [
+      "Satellites miss small, short fires",
+      "Days 5–7 are less reliable",
+      "Not an official OGM warning"
+    ]
+  },
+  "reports": {
+    "title": "Reports from the ground",
+    "lede": "Every report from across Türkiye, ranked so the most urgent and best-checked ones are on top.",
+    "demoNote": "The starting reports are examples for the demo. Reports you send from this device are added and ranked too.",
+    "filterAll": "All",
+    "filterEmergency": "Emergency",
+    "filterVerified": "Verified",
+    "filterPending": "Needs checking",
+    "filterMine": "Sent from this device",
+    "sortLabel": "Sort",
+    "sortPriority": "Priority",
+    "sortNewest": "Newest",
+    "sortVerified": "Most verified",
+    "count": "{n} reports",
+    "types": {
+      "flames": "Flames",
+      "smoke": "Smoke",
+      "spark": "Power-line spark",
+      "stubble": "Stubble burning",
+      "litter": "Glass or litter"
+    },
+    "priority": "priority",
+    "emergency": "Emergency",
+    "verified": "Verified",
+    "likely": "Likely real",
+    "unverified": "Needs checking",
+    "mine": "Your report",
+    "verification": "Verification",
+    "urgency": "Urgency",
+    "checks": {
+      "photo": "Photo or video attached",
+      "gps": "Photo GPS matches place",
+      "time": "Photo time matches report",
+      "unique": "Not a reposted photo",
+      "ai": "AI sees smoke or fire ({p})",
+      "trust": "Reporter trust {p}",
+      "corroborated": "{n} other reports nearby",
+      "satellite": "Satellite heat within 5 km (NASA FIRMS)"
+    },
+    "whyTitle": "Why it’s ranked here",
+    "why": {
+      "type": "{type} is reported",
+      "risk": "model risk here is {level}",
+      "recent": "sent {ago}",
+      "town": "{km} km from {town}",
+      "checks": "{n} of 8 checks passed"
+    },
+    "showOnMap": "Show on map",
+    "call": "Call 112",
+    "remove": "Remove",
+    "unknownPlace": "Place typed by reporter: {text}",
+    "noLocation": "No map location",
+    "empty": "No reports match this filter.",
+    "howTitle": "How the ranking works",
+    "howList": [
+      "Priority = 60 % urgency + 40 % verification, each scored 0–100.",
+      "Urgency: what was seen (flames > smoke > spark > stubble > litter), the model’s fire risk at that spot, how close it is to a town, and how recent it is.",
+      "Verification: photo attached, photo GPS and time match, not a reposted image, AI smoke/fire check, reporter track record, other reports nearby, and satellite heat from NASA FIRMS.",
+      "Emergency = flames or smoke, at least ‘Likely real’, sent in the last 3 hours.",
+      "When the photo checker runs, its trust score (EXIF, repost check, smoke/fire detection, AI image audit, weather and satellite) replaces the website’s estimate."
+    ],
+    "ago": "{t}",
+    "quarantined": "Held back by photo check",
+    "photoCheck": "Photo check: {badge} · {score}/100",
+    "badges": {
+      "green": "green",
+      "amber": "amber",
+      "quarantined": "quarantined"
+    }
+  },
+  "reportDialog": {
+    "title": "Report smoke or fire, or ask for help",
+    "callFirst": "Fire you can see right now? Call <b>112</b> first",
+    "s1": "Add a photo or video",
+    "dropBig": "Drop a photo or video here",
+    "dropSmall": "or tap to take one with your camera",
+    "fileHint": "JPG · PNG · MP4 · MOV · location is read from the photo",
+    "fileAdded": "Added: {name} ({kb} KB)",
+    "noFile": "No file chosen",
+    "s2": "What did you see?",
+    "s3": "Where is it?",
+    "useGps": "Use my location",
+    "typeAddress": "Type an address",
+    "chooseLoc": "Choose how to share the location.",
+    "finding": "Finding your location…",
+    "yourLoc": "Your location · {lat}° N, {lon}° E",
+    "locBlocked": "Location blocked. Type the village or road instead.",
+    "noGeo": "Location isn’t available. Type the place instead.",
+    "addressLabel": "Village, road or landmark",
+    "addressHint": "Type the village, road or landmark.",
+    "s4": "Your name and phone",
+    "s4note": "(optional, only seen by the village head)",
+    "name": "Name",
+    "phone": "Phone",
+    "submit": "Check my report and warn neighbours",
+    "privacy": "Your name and phone stay on this device in the demo. Reports are ranked on the Reports page.",
+    "needType": "Pick at least one thing you saw.",
+    "needPlace": "Add a location so neighbours know where it is.",
+    "sent": "Report added and ranked #{rank} of {n}.",
+    "seeIt": "See it",
+    "verifying": "Checking your photo…",
+    "verifyResult": "Photo check: {badge} ({score}/100)",
+    "verifyFailed": "Couldn’t reach the photo checker. Your report is saved and marked “Needs checking”."
+  },
+  "shareDialog": {
+    "title": "Share the fire risk",
+    "text": "{place} · {level} danger. Send it to your village group so neighbours know.",
+    "sms": "SMS",
+    "copy": "Copy link",
+    "more": "More apps…",
+    "copied": "Link copied",
+    "copyFail": "Couldn’t copy. Copy the address bar instead."
+  },
+  "landing": {
+    "nav": {
+      "map": "Live map",
+      "danger": "Danger levels",
+      "report": "Report",
+      "help": "Help",
+      "learn": "Learn"
+    },
+    "reportBtn": "Report a fire",
+    "kicker": "WILDFIRE PREVENTION · ANTALYA & CENTRAL KALIMANTAN",
+    "lede": "Know today’s fire risk. Know what to do. Help the forest regrow.",
+    "seeRisk": "See today’s risk",
+    "mapEyebrow": "LIVE MAP",
+    "mapTitle": "Fire risk near you, every day",
+    "mapLede": "Our model scores every 5 km square of Türkiye each day from weather, dry vegetation and past fires. Pick your town to see its colour and what to do.",
+    "highestToday": "HIGHEST-RISK TOWN · {date}",
+    "openMap": "Open the live map",
+    "seeData": "See the data behind it",
+    "dangerEyebrow": "THE 4 DANGER LEVELS",
+    "dangerTitle": "What each colour means, and what to do",
+    "dangerLede": "One simple scale for every village, straight from the model. The colour says how easily a fire can start and spread today; the card says what to do.",
+    "reportEyebrow": "REPORT",
+    "reportTitle": "Seen smoke or a fire risk? Tell your neighbours.",
+    "reportLede": "Your photo is checked, ranked with every other report and shown on the reports map.",
+    "callFirst": "Emergency? Call 112 first",
+    "otherChannels": "No internet app? Report by",
+    "verifiedEyebrow": "VERIFIED BY THE COMMUNITY",
+    "verifiedTitle": "Every report, ranked by urgency",
+    "verifiedLede": "Reports from across Türkiye are checked and ranked, so the most urgent, best-verified ones are seen first.",
+    "seeReports": "See all reports",
+    "helpEyebrow": "HOW YOU CAN HELP",
+    "helpTitle": "Protect a forest from wherever you are",
+    "helpLede": "Give, volunteer or share. Small actions add up when they reach the villages that stop fires first.",
+    "raised": "{r} raised",
+    "ofGoal": "of {g} · {n} donors",
+    "donate": "Donate {a}",
+    "donateDemo": "Donations aren’t connected in this demo yet.",
+    "projects": [
+      {
+        "loc": "TÜRKİYE · ANTALYA",
+        "title": "Fire-resistant saplings and patrol gear",
+        "text": "Broadleaf buffer strips (carob, oak, laurel) at village edges, plus radios and pumps for Muhtar patrols."
+      },
+      {
+        "loc": "INDONESIA · CENTRAL KALIMANTAN",
+        "title": "Orangutan habitat and peat rewetting",
+        "text": "Community canal blocks keep Sebangau’s peat wet and protect the forest that orangutans live in."
+      },
+      {
+        "loc": "TÜRKİYE · MUĞLA",
+        "title": "Zero-glass trail kits",
+        "text": "Bottle-return bins and clean-up kits at Lycian and Carian trailheads, so glass never starts a fire."
+      }
+    ],
+    "regrownEyebrow": "REGROWN",
+    "regrownTitle": "Pine Cone & Peatland, Regrown",
+    "regrownLede": "What happens after a fire, if we look after the forest together — and what makes forests burn in the first place.",
+    "tabGoals": "Our goals",
+    "tabLearnTr": "Learn: Türkiye",
+    "tabLearnId": "Learn: Indonesia",
+    "goals": [
+      [
+        "10,000",
+        "saplings planted"
+      ],
+      [
+        "40",
+        "canal blocks built"
+      ],
+      [
+        "60",
+        "villages on daily alerts"
+      ]
+    ],
+    "goalsNote": "2026 pilot goals.",
+    "plantTree": "Plant a tree",
+    "plantDemo": "Tree planting sign-up opens with the pilot.",
+    "learnIntro": "Short facts anyone can read in a minute. Tap “Tell me more” for the details and the source.",
+    "footerAbout": "Made by Indonesian students in Türkiye for COP31 Antalya.",
+    "footerEmergency": "IN AN EMERGENCY",
+    "footerTr": "Türkiye: call",
+    "footerId": "Indonesia: call {n} or your local BPBD office",
+    "footerData": "DATA SOURCES",
+    "footerDisclaimer": "Model forecast for prevention planning — not an official fire warning."
+  },
+  "learn": {
+    "more": "Tell me more",
+    "source": "Source",
+    "twigLabels": [
+      "Very fine · under 0.3 cm",
+      "Fine · 0.3–0.6 cm",
+      "Medium · 0.6–1 cm",
+      "Thick · 1–2.5 cm"
+    ],
+    "riauLegend": {
+      "nonforest": "Already deforested",
+      "forest": "Forest",
+      "acacia": "Acacia plantation",
+      "cloud": "Hidden by cloud"
+    },
+    "tr": [
+      {
+        "id": "redpine",
+        "icon": "🌲",
+        "title": "Red pine: Türkiye’s main fire tree",
+        "simple": "Its sticky resin and dry needles burn very hot.",
+        "num": "59.6%",
+        "numLabel": "of the land burned by 2021’s 30 biggest fires was pure red pine forest",
+        "more": "Red pine (kızılçam) fills the hot coast from the Aegean to the Mediterranean, where most fires start. After a fire its cones drop seeds and young trees grow back. That is bouncing back — not resisting fire."
+      },
+      {
+        "id": "blackpine",
+        "icon": "⛰️",
+        "title": "Black pine can’t bounce back",
+        "simple": "Its fires used to stay on the ground. Now they climb into the treetops, and the trees die for good.",
+        "num": "4 million+ ha",
+        "numLabel": "of black pine forest in Türkiye",
+        "more": "In 2021 black pine made up 7.67% (12,811 ha) of the area burned by the biggest fires. It has no way to recover from crown fires, so burned stands don’t regrow on their own."
+      },
+      {
+        "id": "maquis",
+        "icon": "🌿",
+        "title": "Maquis is the ladder fire climbs",
+        "simple": "Low shrubs under the pines carry a ground fire up into the treetops.",
+        "num": "6 million ha",
+        "numLabel": "of maquis — about 30% of Türkiye’s forest land",
+        "more": "Common maquis plants are kermes oak, rock rose (Cistus), strawberry tree, mastic (Pistacia lentiscus) and Phillyrea. Clearing them near roads and villages breaks the ladder."
+      },
+      {
+        "id": "twigs",
+        "icon": "🔥",
+        "title": "Thin twigs catch fire first",
+        "simple": "The thinner the twig, the faster it dries out and burns.",
+        "visual": "twigs",
+        "more": "Scientists sort a tree’s crown fuel by thickness. The very fine twigs (under 3 mm) carry flames fastest — that’s why a dry pine crown can go up in seconds."
+      },
+      {
+        "id": "stands",
+        "icon": "🌳",
+        "title": "Not every forest burns the same",
+        "simple": "Open woods full of shrubs, thick pine stands, eucalyptus and broadleaf woods all behave differently in a fire.",
+        "more": "Eucalyptus leaves are full of oils and are extremely flammable. Broadleaf trees such as oak, carob and laurel are often planted at village edges as green fire breaks."
+      },
+      {
+        "id": "rows",
+        "icon": "📏",
+        "title": "Same-age pine rows = one big fuel bed",
+        "simple": "Huge plantations of one pine, all the same age, give fire a non-stop path.",
+        "more": "Large pine plantations across the Mediterranean created continuous, even-aged stands that raise flammability and fire hazard. Mixing species and ages breaks that path."
+      },
+      {
+        "id": "season",
+        "icon": "📅",
+        "title": "Fire season is getting longer",
+        "simple": "Most fires happen from May to November — and risk now reaches into autumn and early spring.",
+        "num": "85%",
+        "numLabel": "of forest fires happen between May and November",
+        "more": "Experts warn that under dry, windy weather, fires can now start as early as March and April and keep going into October and November."
+      },
+      {
+        "id": "vulnerable",
+        "icon": "🗺️",
+        "title": "Most of our forests are at risk",
+        "simple": "About two out of three hectares of forest are highly vulnerable to fire.",
+        "num": "~65%",
+        "numLabel": "of Türkiye’s forests (about 15 million ha) are highly vulnerable",
+        "more": "That’s why daily risk maps and early reports from people on the ground matter so much."
+      }
+    ],
+    "id": [
+      {
+        "id": "peat",
+        "icon": "💧",
+        "title": "Wet peat doesn’t burn. Drained peat does.",
+        "simple": "Peat is old, soggy plant matter. Drain it and it dries like fuel — and can smoulder underground for weeks.",
+        "num": "16 of 24 million ha",
+        "numLabel": "of Indonesia’s peatland made more fire-prone by damage (Pantau Gambut estimate, 2026)",
+        "more": "Peat fires make thick, smoky haze. Blocking drainage canals keeps peat wet so it can’t burn."
+      },
+      {
+        "id": "idle",
+        "icon": "🏚️",
+        "title": "Fires burn the “in-between” land",
+        "simple": "Most fires aren’t in forests or in plantations — they’re on cleared, drained land waiting to be planted.",
+        "num": "76%",
+        "numLabel": "of the area burned in 2019 (seven provinces) was idle land",
+        "more": "Only 3% of the burned land was inside oil palm plantations and 0.4% in acacia, rubber or rice fields. Fires set on plantations can spread easily into the dry idle land around them."
+      },
+      {
+        "id": "riau",
+        "icon": "📊",
+        "title": "The 2013 Riau fires in one bar",
+        "simple": "Most of the land that burned had already lost its forest.",
+        "visual": "riau",
+        "num": "163,336 ha",
+        "numLabel": "burned in one week in June 2013, 84% of it on peat",
+        "more": "Of the already-deforested land that burned, 57% was scrub and bare soil, 31% young oil palm and 7% mature oil palm. The fires happened in a wetter-than-normal year, after just two dry months."
+      },
+      {
+        "id": "tusam",
+        "icon": "🌲",
+        "title": "The pine that crossed the equator",
+        "simple": "Sumatran pine (tusam) is Indonesia’s own pine — and like Türkiye’s pines, its resin-rich needles burn hot.",
+        "more": "It is widely planted in Java and Sulawesi. One study suspects that resin-tapping holes and tree size may affect how intensely it burns."
+      },
+      {
+        "id": "east",
+        "icon": "🌾",
+        "title": "2026: fires moved to the dry east",
+        "simple": "Dry savannas in Nusa Tenggara burned a lot this year.",
+        "num": "178,232 ha",
+        "numLabel": "burned in Indonesia in January–June 2026 — Bali & Nusa Tenggara had 18.7%",
+        "more": "Savanna is the cover that burns most in Nusa Tenggara. In Mutis forest, burned plots are dominated by fire-tolerant Eucalyptus urophylla."
+      },
+      {
+        "id": "gelam",
+        "icon": "🌳",
+        "title": "Burn too often and the forest changes",
+        "simple": "Repeated fires turn tall swamp forest into gelam thickets and grassland.",
+        "more": "Gelam (Melaleuca cajuputi) survives fire, so after many burns it takes over — and the original swamp forest doesn’t come back."
+      },
+      {
+        "id": "alang",
+        "icon": "🌱",
+        "title": "The grass that keeps fire alive",
+        "simple": "Alang-alang grass takes over burned land, then burns again and again.",
+        "more": "Repeated fires remove plants taller than alang-alang (Imperata cylindrica), so the grass stays in charge and trees can’t return."
+      }
+    ]
+  }
+}

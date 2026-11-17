@@ -9,3 +9,5 @@
 /.env
 /.claude
 /False Info Predictor.pdf
+# website data, generated from bizdenbize/dashboard/*.json by bizdenbize/scripts/web_export.py
+/web/data/

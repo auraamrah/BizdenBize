@@ -99,6 +99,20 @@ JUKUT/
 4. Run `05_train_turkiye.py --export` to train the model and write the dashboard data. Add `--no-history` to produce the variant without history features.
 5. Run `06_predict_live.py` for the daily map. Open `bizdenbize/dashboard/index.html` in a browser to view it.
 
+---
+
+## Website (`web/`)
+
+The public site — citizen risk map, science view, ranked citizen reports, and short lessons in
+English, Türkçe and Bahasa Indonesia — lives in [`web/`](web/README.md) and is published with GitHub Pages
+at **https://auraamrah.github.io/BizdenBize/**.
+
+- It reads this repo's model output: `bizdenbize/scripts/web_export.py` turns `bizdenbize/dashboard/data.live.json`
+  and `data.json` into `web/data/*.json`. `06_predict_live.py` and `05_train_turkiye.py --export` run it automatically,
+  and `.github/workflows/pages.yml` runs it on every deploy — so pushing a new `data.live.json` updates the site.
+- Citizen reports with a photo or video are checked by [`bizdenbize/upload_verifier`](bizdenbize/upload_verifier/README.md)
+  when the site is pointed at a running verifier.
+
 ## 6. Limitations
 
 - The labels come from satellite hotspots, which detect only fires that are large or hot enough to be seen. Small fires that burn out quickly are missed.

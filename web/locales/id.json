@@ -1,0 +1,597 @@
+{
+  "meta": {
+    "name": "Bahasa Indonesia",
+    "short": "ID",
+    "locale": "id-ID"
+  },
+  "common": {
+    "brandSub": "Risiko kebakaran hutan",
+    "citizen": "Warga",
+    "citizenLong": "",
+    "science": "Sains",
+    "scienceLong": "",
+    "reports": "Laporan",
+    "language": "Bahasa",
+    "themeToLight": "Beralih ke mode terang",
+    "themeToDark": "Beralih ke mode gelap",
+    "dataset": "Data",
+    "datasetLive": "Prakiraan langsung",
+    "datasetHindcast": "Hindcast · 27 Jul – 2 Agu 2021",
+    "bannerLabel": "Prakiraan model",
+    "bannerLive": "Model BizdenBize dijalankan {time}. Bukan peringatan resmi OGM. Dalam keadaan darurat hubungi 112.",
+    "bannerHindcast": "Putar ulang pekan kebakaran besar 2021, dinilai model tanpa melihat data 2021. Bukan prakiraan langsung.",
+    "bannerStale": "Prakiraan ini lebih dari 36 jam. Periksa OGM untuk peringatan hari ini.",
+    "loadError": "Data risiko tidak dapat dimuat ({file}). Muat ulang halaman; jika tetap gagal, hasil model harian mungkin belum diterbitkan.",
+    "footerLeft": "#BizdenBize · COP31 Climate Tech Creathon · Antalya 2026",
+    "footerRight": "Model: LightGBM dengan FWI EFFIS/Copernicus · Open-Meteo · NASA FIRMS · OpenStreetMap · ESA WorldCover · OGM",
+    "close": "Tutup",
+    "today": "Hari ini",
+    "population": "pend. {n}",
+    "mapAttribution": "Risiko: model BizdenBize"
+  },
+  "levels": {
+    "low": {
+      "name": "Rendah",
+      "tag": "AKTIVITAS NORMAL",
+      "meaning": "Api sulit menyala dan menyebar perlahan.",
+      "todo": [
+        "Nikmati hutan",
+        "Rencanakan kerja ladang seperti biasa"
+      ]
+    },
+    "moderate": {
+      "name": "Sedang",
+      "tag": "BERHATI-HATILAH",
+      "meaning": "Api bisa menyala. Rumput kering mudah terbakar.",
+      "todo": [
+        "Nyalakan api hanya di tempat barbekyu permanen",
+        "Jangan membakar jerami atau sampah kebun"
+      ]
+    },
+    "high": {
+      "name": "Tinggi",
+      "tag": "DILARANG MENYALAKAN API DI LUAR",
+      "meaning": "Api mudah menyala dan cepat menyebar.",
+      "todo": [
+        "Tidak ada barbekyu atau api unggun di mana pun",
+        "Tidak ada api di luar ruangan, bahkan untuk teh"
+      ]
+    },
+    "extreme": {
+      "name": "Ekstrem",
+      "tag": "JANGAN MASUK HUTAN",
+      "meaning": "Api akan sangat sulit dihentikan.",
+      "todo": [
+        "Jangan masuk hutan hari ini",
+        "Jangan pakai mesin yang bisa memercikkan api"
+      ]
+    },
+    "scoreLabel": "skor model"
+  },
+  "actions": {
+    "farmer": {
+      "low": [
+        "Rencanakan kerja ladang seperti biasa",
+        "Jangan bakar jerami; bajak ke dalam tanah",
+        "Siapkan drum air dan sekop di ladang"
+      ],
+      "moderate": [
+        "Jalankan mesin pagi hari, bukan siang yang panas",
+        "Jangan membakar jerami atau sampah kebun",
+        "Siapkan drum air dan sekop di ladang"
+      ],
+      "high": [
+        "Hentikan panen dengan mesin yang memercikkan api",
+        "Tidak ada api sama sekali di luar ruangan",
+        "Bersihkan rumput kering 10 m di sekitar bangunan"
+      ],
+      "extreme": [
+        "Hentikan semua kerja ladang dekat hutan",
+        "Jangan pakai mesin yang bisa memercikkan api",
+        "Ketahui jalur evakuasi desa Anda"
+      ]
+    },
+    "visitor": {
+      "low": [
+        "Nikmati hutan",
+        "Gunakan hanya tempat barbekyu permanen",
+        "Bawa pulang botol kaca dan sampah Anda"
+      ],
+      "moderate": [
+        "Barbekyu hanya di tempat permanen",
+        "Jangan pernah membuang rokok dari mobil",
+        "Bawa pulang botol kaca dan sampah Anda"
+      ],
+      "high": [
+        "Tidak ada barbekyu atau api unggun di mana pun",
+        "Parkir hanya di kerikil atau aspal",
+        "Simpan nomor 112 di ponsel Anda"
+      ],
+      "extreme": [
+        "Jangan masuk hutan hari ini",
+        "Pilih rencana ke pantai atau kota",
+        "Jika melihat asap, hubungi 112 dulu"
+      ]
+    },
+    "volunteer": {
+      "low": [
+        "Ikut bersih-bersih jalur pekan ini",
+        "Periksa perlengkapan pemadam desa",
+        "Bagikan warna hari ini ke grup Anda"
+      ],
+      "moderate": [
+        "Periksa perlengkapan pemadam desa",
+        "Ingatkan tetangga: jangan bakar jerami",
+        "Bagikan warna hari ini ke grup Anda"
+      ],
+      "high": [
+        "Ikut jadwal ronda malam",
+        "Pastikan ponsel terisi dan menyala",
+        "Bagikan warna hari ini ke grup Anda"
+      ],
+      "extreme": [
+        "Ikuti arahan Muhtar (kepala desa)",
+        "Bantu tetangga lansia bersiap mengungsi",
+        "Jangan padamkan api sendiri — hubungi 112"
+      ]
+    }
+  },
+  "live": {
+    "searchLabel": "Cari kota atau desa",
+    "searchPlaceholder": "Cari kota atau desa",
+    "nearMe": "Dekat saya",
+    "suggested": "KOTA TERBESAR",
+    "matching": "TEMPAT YANG COCOK",
+    "noMatch": "Tidak ada tempat bernama “{q}” di daftar model. Ketuk peta saja.",
+    "fireRisk": "RISIKO KEBAKARAN",
+    "score": "SKOR {s}",
+    "danger": "BAHAYA {level}",
+    "mean10": "Rata-rata sel model dalam radius 10 km dari pusat kota.",
+    "pointNote": "Sel model sekitar 5 km di titik ini.",
+    "spotName": "Titik dekat {town}",
+    "spotNameNone": "Titik terpilih",
+    "weatherNow": "Cuaca sekarang · {place}",
+    "weatherBy": "Open-Meteo · {time}",
+    "weatherTitle": "Cuaca langsung",
+    "weatherHindcast": "Tidak ditampilkan untuk putar ulang 2021",
+    "weatherError": "Tidak dapat terhubung ke Open-Meteo. Periksa koneksi lalu muat ulang.",
+    "loading": "Memuat…",
+    "temp": "Suhu",
+    "humidity": "Kelembapan",
+    "wind": "Angin",
+    "next7": "7 HARI KE DEPAN",
+    "days7": "7 HARI",
+    "whatToDo": "APA YANG BISA ANDA LAKUKAN",
+    "roles": {
+      "farmer": "Petani",
+      "visitor": "Pengunjung",
+      "volunteer": "Relawan"
+    },
+    "listen": "Dengarkan",
+    "share": "Bagikan",
+    "whatsapp": "WhatsApp",
+    "callSmoke": "Lihat asap? Hubungi",
+    "dataBehind": "Lihat data di baliknya →",
+    "mapHint": "Ketuk peta untuk memeriksa titik mana pun.",
+    "showLow": "Tampilkan sel risiko rendah",
+    "showFires": "Titik api aktif (NASA FIRMS)",
+    "showTowns": "Kota",
+    "coloursLink": "Arti warna",
+    "dropTitle": "Melihat asap atau risiko kebakaran? Tambahkan foto atau video",
+    "dropText": "Letakkan di sini atau ketuk untuk memakai kamera. Lokasi dan waktu kami baca dari foto.",
+    "sendReport": "Kirim laporan",
+    "guideTitle": "Arti warna",
+    "guideSub": "Satu skala sederhana, sama di seluruh Türkiye.",
+    "todayBadge": "HARI INI",
+    "spoken": "Risiko kebakaran di {place} {level}. {meaning} {first}.",
+    "waText": "Risiko kebakaran di {place}: {level} ({tag}). {meaning} — #BizdenBize: {url}",
+    "toastFinding": "Mencari lokasi Anda…",
+    "toastUsing": "Memakai lokasi Anda — kota terdekat: {town}",
+    "toastBlocked": "Akses lokasi ditolak. Cari kota Anda saja.",
+    "toastNoGeo": "Lokasi tidak tersedia di peramban ini.",
+    "toastOutside": "Anda di luar wilayah model. Menampilkan kota terdekat: {town}",
+    "toastReading": "Membacakan risiko kebakaran…",
+    "toastNoSpeech": "Peramban ini tidak bisa membacakan teks.",
+    "firePopup": "Deteksi panas satelit (NASA FIRMS VIIRS), {date}"
+  },
+  "science": {
+    "title": "Tampilan sains",
+    "kpiModerate": "Sel Sedang atau lebih",
+    "kpiModerateNote": "{date} · dari {n} sel daratan",
+    "kpiHigh": "Sel Tinggi atau Ekstrem",
+    "kpiHighNote": "{share} daratan",
+    "kpiFwi": "FWI rata-rata (seluruh daratan)",
+    "kpiFwiNote": "maksimum {max}",
+    "kpiFires": "Titik api aktif (satelit)",
+    "kpiFiresNote": "NASA FIRMS VIIRS, proses terakhir",
+    "layerClass": "Kelas risiko",
+    "layerScore": "Skor risiko",
+    "layerFwi": "Indeks Cuaca Kebakaran",
+    "cellDetail": "Detail sel",
+    "clickCell": "Klik sel mana pun di peta untuk melihat alasan skornya.",
+    "score": "Skor risiko",
+    "fwi": "Indeks Cuaca Kebakaran (FWI)",
+    "coords": "Koordinat",
+    "nearestTown": "Kota terdekat",
+    "drivers": "PENENTU SKOR (PORSI SHAP)",
+    "groups": {
+      "weather": "Cuaca & kekeringan",
+      "human": "Akses manusia",
+      "history": "Riwayat kebakaran",
+      "environment": "Tutupan lahan & medan"
+    },
+    "chartTitle": "Sel Sedang atau lebih, per hari",
+    "chartSub": "Sel rendah tidak ditampilkan. Pilih batang untuk mengganti hari.",
+    "tableTitle": "Permukiman paling berisiko",
+    "tableSub": "Skor rata-rata sel dalam radius 10 km. Pilih baris untuk membukanya di tampilan warga.",
+    "thPlace": "Permukiman",
+    "thClass": "Kelas",
+    "thScore": "Skor ▼",
+    "modelTitle": "Model dan data",
+    "m1": "ROC-AUC (tahun uji 2025)",
+    "m1n": "FWI saja 0,669 · regresi logistik 0,881",
+    "m2": "Kebakaran tertangkap di 5 % risiko teratas",
+    "m2n": "FWI saja 14,6 %",
+    "m3": "PR-AUC",
+    "m3n": "Terlihat rendah karena kebakaran sangat jarang; baca bersama ROC-AUC.",
+    "method": "Metode penilaian",
+    "methodText": "LightGBM dilatih dengan deteksi kebakaran VIIRS di seluruh Türkiye (sel 0,05°, 2021–2025): FWI dan sub-indeks beserta rata-rata bergerak, jarak ke jalan, permukiman dan lahan pertanian, riwayat kebakaran sel, tutupan lahan, ketinggian dan kemiringan. FWI membatasi kelas, sehingga hari dengan cuaca kebakaran rendah tidak bisa menunjukkan risiko ekstrem.",
+    "sources": "Sumber data",
+    "sourceList": [
+      "Copernicus EMS / EFFIS — Indeks Cuaca Kebakaran",
+      "Open-Meteo — cuaca 7 hari",
+      "NASA FIRMS (VIIRS) — label kebakaran dan titik api aktif",
+      "OpenStreetMap — jalan, permukiman",
+      "ESA WorldCover · Copernicus DEM · riwayat kebakaran OGM"
+    ],
+    "limits": "Keterbatasan",
+    "limitList": [
+      "Satelit melewatkan kebakaran kecil dan singkat",
+      "Hari ke-5–7 kurang andal",
+      "Bukan peringatan resmi OGM"
+    ]
+  },
+  "reports": {
+    "title": "Laporan dari lapangan",
+    "lede": "Semua laporan dari seluruh Türkiye, diurutkan agar yang paling mendesak dan paling terverifikasi ada di atas.",
+    "demoNote": "Laporan awal adalah contoh untuk demo. Laporan yang Anda kirim dari perangkat ini juga ditambahkan dan diurutkan.",
+    "filterAll": "Semua",
+    "filterEmergency": "Darurat",
+    "filterVerified": "Terverifikasi",
+    "filterPending": "Perlu dicek",
+    "filterMine": "Dari perangkat ini",
+    "sortLabel": "Urutkan",
+    "sortPriority": "Prioritas",
+    "sortNewest": "Terbaru",
+    "sortVerified": "Paling terverifikasi",
+    "count": "{n} laporan",
+    "types": {
+      "flames": "Api",
+      "smoke": "Asap",
+      "spark": "Percikan kabel listrik",
+      "stubble": "Pembakaran jerami",
+      "litter": "Kaca atau sampah"
+    },
+    "priority": "prioritas",
+    "emergency": "Darurat",
+    "verified": "Terverifikasi",
+    "likely": "Kemungkinan nyata",
+    "unverified": "Perlu dicek",
+    "mine": "Laporan Anda",
+    "verification": "Verifikasi",
+    "urgency": "Urgensi",
+    "checks": {
+      "photo": "Ada foto atau video",
+      "gps": "GPS foto cocok dengan lokasi",
+      "time": "Waktu foto cocok dengan laporan",
+      "unique": "Bukan foto unggahan ulang",
+      "ai": "AI melihat asap atau api ({p})",
+      "trust": "Kepercayaan pelapor {p}",
+      "corroborated": "{n} laporan lain di dekatnya",
+      "satellite": "Panas satelit dalam 5 km (NASA FIRMS)"
+    },
+    "whyTitle": "Mengapa di urutan ini",
+    "why": {
+      "type": "{type} dilaporkan",
+      "risk": "risiko model di sini {level}",
+      "recent": "dikirim {ago}",
+      "town": "{km} km dari {town}",
+      "checks": "{n} dari 8 pemeriksaan lolos"
+    },
+    "showOnMap": "Lihat di peta",
+    "call": "Hubungi 112",
+    "remove": "Hapus",
+    "unknownPlace": "Tempat yang ditulis pelapor: {text}",
+    "noLocation": "Tanpa lokasi peta",
+    "empty": "Tidak ada laporan yang cocok dengan filter ini.",
+    "howTitle": "Cara kerja peringkat",
+    "howList": [
+      "Prioritas = 60 % urgensi + 40 % verifikasi, masing-masing bernilai 0–100.",
+      "Urgensi: apa yang terlihat (api > asap > percikan > jerami > sampah), risiko model di titik itu, jarak ke permukiman, dan seberapa baru laporannya.",
+      "Verifikasi: ada foto, GPS dan waktu foto cocok, bukan foto unggahan ulang, pemeriksaan asap/api oleh AI, rekam jejak pelapor, laporan lain di dekatnya, dan panas satelit NASA FIRMS.",
+      "Darurat = api atau asap, minimal ‘Kemungkinan nyata’, dikirim dalam 3 jam terakhir.",
+      "Saat pemeriksa foto berjalan, skor kepercayaannya (EXIF, cek unggahan ulang, deteksi asap/api, audit gambar AI, cuaca dan satelit) menggantikan perkiraan situs."
+    ],
+    "ago": "{t}",
+    "quarantined": "Ditahan oleh pemeriksaan foto",
+    "photoCheck": "Pemeriksaan foto: {badge} · {score}/100",
+    "badges": {
+      "green": "hijau",
+      "amber": "kuning",
+      "quarantined": "dikarantina"
+    }
+  },
+  "reportDialog": {
+    "title": "Laporkan asap atau api, atau minta bantuan",
+    "callFirst": "Ada api yang terlihat sekarang? Hubungi <b>112</b> dulu",
+    "s1": "Tambahkan foto atau video",
+    "dropBig": "Letakkan foto atau video di sini",
+    "dropSmall": "atau ketuk untuk memotret dengan kamera",
+    "fileHint": "JPG · PNG · MP4 · MOV · lokasi dibaca dari foto",
+    "fileAdded": "Ditambahkan: {name} ({kb} KB)",
+    "noFile": "Belum ada berkas",
+    "s2": "Apa yang Anda lihat?",
+    "s3": "Di mana lokasinya?",
+    "useGps": "Pakai lokasi saya",
+    "typeAddress": "Tulis alamat",
+    "chooseLoc": "Pilih cara membagikan lokasi.",
+    "finding": "Mencari lokasi Anda…",
+    "yourLoc": "Lokasi Anda · {lat}° LU, {lon}° BT",
+    "locBlocked": "Akses lokasi ditolak. Tulis nama desa atau jalan.",
+    "noGeo": "Lokasi tidak tersedia. Tulis tempatnya.",
+    "addressLabel": "Desa, jalan, atau tengara",
+    "addressHint": "Tulis desa, jalan, atau tengara.",
+    "s4": "Nama dan nomor telepon Anda",
+    "s4note": "(opsional, hanya dilihat kepala desa)",
+    "name": "Nama",
+    "phone": "Telepon",
+    "submit": "Periksa laporan saya dan peringatkan tetangga",
+    "privacy": "Dalam demo, nama dan nomor Anda tetap di perangkat ini. Laporan diurutkan di halaman Laporan.",
+    "needType": "Pilih setidaknya satu hal yang Anda lihat.",
+    "needPlace": "Tambahkan lokasi agar tetangga tahu tempatnya.",
+    "sent": "Laporan ditambahkan dan berada di urutan #{rank} dari {n}.",
+    "seeIt": "Lihat",
+    "verifying": "Memeriksa foto Anda…",
+    "verifyResult": "Pemeriksaan foto: {badge} ({score}/100)",
+    "verifyFailed": "Pemeriksa foto tidak dapat dihubungi. Laporan Anda disimpan dan ditandai “Perlu dicek”."
+  },
+  "shareDialog": {
+    "title": "Bagikan risiko kebakaran",
+    "text": "{place} · bahaya {level}. Kirim ke grup desa agar tetangga tahu.",
+    "sms": "SMS",
+    "copy": "Salin tautan",
+    "more": "Aplikasi lain…",
+    "copied": "Tautan disalin",
+    "copyFail": "Gagal menyalin. Salin dari bilah alamat."
+  },
+  "landing": {
+    "nav": {
+      "map": "Peta langsung",
+      "danger": "Tingkat bahaya",
+      "report": "Lapor",
+      "help": "Bantu",
+      "learn": "Belajar"
+    },
+    "reportBtn": "Laporkan kebakaran",
+    "kicker": "PENCEGAHAN KEBAKARAN HUTAN · ANTALYA & KALIMANTAN TENGAH",
+    "lede": "Ketahui risiko kebakaran hari ini. Ketahui yang harus dilakukan. Bantu hutan tumbuh kembali.",
+    "seeRisk": "Lihat risiko hari ini",
+    "mapEyebrow": "PETA LANGSUNG",
+    "mapTitle": "Risiko kebakaran di sekitar Anda, setiap hari",
+    "mapLede": "Model kami menilai setiap kotak 5 km di Türkiye setiap hari berdasarkan cuaca, vegetasi kering, dan kebakaran sebelumnya. Pilih kota Anda untuk melihat warnanya dan apa yang harus dilakukan.",
+    "highestToday": "KOTA PALING BERISIKO · {date}",
+    "openMap": "Buka peta langsung",
+    "seeData": "Lihat datanya",
+    "dangerEyebrow": "4 TINGKAT BAHAYA",
+    "dangerTitle": "Arti setiap warna, dan apa yang harus dilakukan",
+    "dangerLede": "Satu skala sederhana untuk setiap desa, langsung dari model. Warna menunjukkan seberapa mudah api menyala dan menyebar hari ini; kartu menunjukkan apa yang harus dilakukan.",
+    "reportEyebrow": "LAPOR",
+    "reportTitle": "Melihat asap atau risiko kebakaran? Beri tahu tetangga.",
+    "reportLede": "Foto Anda diperiksa, diurutkan bersama semua laporan lain, dan ditampilkan di peta laporan.",
+    "callFirst": "Darurat? Hubungi 112 dulu",
+    "otherChannels": "Tidak ada aplikasi internet? Lapor lewat",
+    "verifiedEyebrow": "DIVERIFIKASI WARGA",
+    "verifiedTitle": "Setiap laporan, diurutkan menurut urgensi",
+    "verifiedLede": "Laporan dari seluruh Türkiye diperiksa dan diurutkan, sehingga yang paling mendesak dan paling terverifikasi terlihat lebih dulu.",
+    "seeReports": "Lihat semua laporan",
+    "helpEyebrow": "CARA ANDA MEMBANTU",
+    "helpTitle": "Lindungi hutan dari mana saja",
+    "helpLede": "Berdonasi, menjadi relawan, atau berbagi. Langkah kecil berarti besar saat sampai ke desa yang pertama kali menghentikan api.",
+    "raised": "{r} terkumpul",
+    "ofGoal": "dari {g} · {n} donatur",
+    "donate": "Donasi {a}",
+    "donateDemo": "Donasi belum terhubung dalam demo ini.",
+    "projects": [
+      {
+        "loc": "TÜRKİYE · ANTALYA",
+        "title": "Bibit tahan api dan perlengkapan patroli",
+        "text": "Jalur penyangga pohon berdaun lebar (carob, ek, salam) di tepi desa, plus radio dan pompa untuk patroli Muhtar."
+      },
+      {
+        "loc": "INDONESIA · KALIMANTAN TENGAH",
+        "title": "Habitat orangutan dan pembasahan gambut",
+        "text": "Sekat kanal warga menjaga gambut Sebangau tetap basah dan melindungi hutan tempat orangutan hidup."
+      },
+      {
+        "loc": "TÜRKİYE · MUĞLA",
+        "title": "Perlengkapan jalur bebas kaca",
+        "text": "Tempat pengembalian botol dan perlengkapan bersih-bersih di awal jalur Lycia dan Caria, agar kaca tidak pernah memicu api."
+      }
+    ],
+    "regrownEyebrow": "TUMBUH KEMBALI",
+    "regrownTitle": "Kerucut Pinus & Gambut, Tumbuh Kembali",
+    "regrownLede": "Apa yang terjadi setelah kebakaran jika kita merawat hutan bersama — dan apa yang membuat hutan terbakar.",
+    "tabGoals": "Target kami",
+    "tabLearnTr": "Belajar: Türkiye",
+    "tabLearnId": "Belajar: Indonesia",
+    "goals": [
+      [
+        "10.000",
+        "bibit ditanam"
+      ],
+      [
+        "40",
+        "sekat kanal dibangun"
+      ],
+      [
+        "60",
+        "desa menerima peringatan harian"
+      ]
+    ],
+    "goalsNote": "Target pilot 2026.",
+    "plantTree": "Tanam pohon",
+    "plantDemo": "Pendaftaran penanaman pohon dibuka bersama pilot.",
+    "learnIntro": "Fakta singkat yang bisa dibaca siapa saja dalam satu menit. Ketuk “Selengkapnya” untuk detail dan sumbernya.",
+    "footerAbout": "Dibuat oleh mahasiswa Indonesia di Türkiye untuk COP31 Antalya.",
+    "footerEmergency": "SAAT DARURAT",
+    "footerTr": "Türkiye: hubungi",
+    "footerId": "Indonesia: hubungi {n} atau kantor BPBD setempat",
+    "footerData": "SUMBER DATA",
+    "footerDisclaimer": "Prakiraan model untuk perencanaan pencegahan — bukan peringatan kebakaran resmi."
+  },
+  "learn": {
+    "more": "Selengkapnya",
+    "source": "Sumber",
+    "twigLabels": [
+      "Sangat halus · di bawah 0,3 cm",
+      "Halus · 0,3–0,6 cm",
+      "Sedang · 0,6–1 cm",
+      "Tebal · 1–2,5 cm"
+    ],
+    "riauLegend": {
+      "nonforest": "Sudah gundul",
+      "forest": "Hutan",
+      "acacia": "Kebun akasia",
+      "cloud": "Tertutup awan"
+    },
+    "tr": [
+      {
+        "id": "redpine",
+        "icon": "🌲",
+        "title": "Pinus merah: pohon api utama Türkiye",
+        "simple": "Getah lengket dan daun jarumnya yang kering terbakar sangat panas.",
+        "num": "59,6%",
+        "numLabel": "lahan yang terbakar dalam 30 kebakaran terbesar 2021 adalah hutan pinus merah murni",
+        "more": "Pinus merah (kızılçam) memenuhi pesisir panas dari Laut Aegea hingga Mediterania, tempat sebagian besar kebakaran bermula. Setelah terbakar, kerucutnya menjatuhkan biji dan pohon muda tumbuh lagi. Itu namanya pulih — bukan tahan api."
+      },
+      {
+        "id": "blackpine",
+        "icon": "⛰️",
+        "title": "Pinus hitam tidak bisa pulih",
+        "simple": "Dulu apinya tetap di tanah. Kini api naik ke tajuk dan pohonnya mati selamanya.",
+        "num": "4 juta+ ha",
+        "numLabel": "hutan pinus hitam di Türkiye",
+        "more": "Pada 2021 pinus hitam mencakup 7,67% (12.811 ha) area yang terbakar oleh kebakaran terbesar. Pohon ini tidak beradaptasi dengan kebakaran tajuk, jadi tegakan yang terbakar tidak tumbuh kembali sendiri."
+      },
+      {
+        "id": "maquis",
+        "icon": "🌿",
+        "title": "Maquis adalah tangga bagi api",
+        "simple": "Semak rendah di bawah pinus membawa api dari tanah naik ke tajuk pohon.",
+        "num": "6 juta ha",
+        "numLabel": "maquis — sekitar 30% lahan hutan Türkiye",
+        "more": "Tanaman maquis umum: ek kermes, Cistus, pohon stroberi, mastik (Pistacia lentiscus) dan Phillyrea. Membersihkannya di dekat jalan dan desa memutus ‘tangga’ api."
+      },
+      {
+        "id": "twigs",
+        "icon": "🔥",
+        "title": "Ranting tipis terbakar lebih dulu",
+        "simple": "Makin tipis rantingnya, makin cepat kering dan terbakar.",
+        "visual": "twigs",
+        "more": "Ilmuwan mengelompokkan bahan bakar tajuk menurut ketebalan. Ranting sangat halus (di bawah 3 mm) paling cepat menjalarkan api — itulah sebabnya tajuk pinus kering bisa menyala dalam hitungan detik."
+      },
+      {
+        "id": "stands",
+        "icon": "🌳",
+        "title": "Tidak semua hutan terbakar sama",
+        "simple": "Hutan terbuka penuh semak, tegakan pinus rapat, eukaliptus, dan hutan daun lebar berperilaku berbeda saat terbakar.",
+        "more": "Daun eukaliptus penuh minyak dan sangat mudah terbakar. Pohon daun lebar seperti ek, carob, dan salam sering ditanam di tepi desa sebagai sekat api hijau."
+      },
+      {
+        "id": "rows",
+        "icon": "📏",
+        "title": "Barisan pinus seumur = satu hamparan bahan bakar",
+        "simple": "Perkebunan pinus raksasa dengan satu jenis dan umur yang sama memberi api jalur tanpa putus.",
+        "more": "Perkebunan pinus besar di Mediterania menciptakan tegakan seumur yang menyambung, sehingga meningkatkan keterbakaran dan bahaya api. Mencampur jenis dan umur memutus jalur itu."
+      },
+      {
+        "id": "season",
+        "icon": "📅",
+        "title": "Musim kebakaran makin panjang",
+        "simple": "Sebagian besar kebakaran terjadi Mei–November — dan risikonya kini sampai ke musim gugur dan awal musim semi.",
+        "num": "85%",
+        "numLabel": "kebakaran hutan terjadi antara Mei dan November",
+        "more": "Para ahli memperingatkan bahwa dalam cuaca kering dan berangin, kebakaran kini bisa mulai sejak Maret–April dan berlanjut hingga Oktober–November."
+      },
+      {
+        "id": "vulnerable",
+        "icon": "🗺️",
+        "title": "Sebagian besar hutan kita berisiko",
+        "simple": "Sekitar dua dari tiga hektare hutan sangat rentan terbakar.",
+        "num": "~65%",
+        "numLabel": "hutan Türkiye (sekitar 15 juta ha) sangat rentan",
+        "more": "Karena itu peta risiko harian dan laporan cepat dari warga di lapangan sangat penting."
+      }
+    ],
+    "id": [
+      {
+        "id": "peat",
+        "icon": "💧",
+        "title": "Gambut basah tidak terbakar. Gambut kering terbakar.",
+        "simple": "Gambut adalah sisa tumbuhan lama yang basah. Jika dikeringkan, ia jadi seperti bahan bakar — dan bisa membara di bawah tanah berminggu-minggu.",
+        "num": "16 dari 24 juta ha",
+        "numLabel": "lahan gambut Indonesia jadi lebih rawan terbakar akibat kerusakan (perkiraan Pantau Gambut, 2026)",
+        "more": "Kebakaran gambut menghasilkan kabut asap tebal. Menyekat kanal drainase menjaga gambut tetap basah sehingga tidak bisa terbakar."
+      },
+      {
+        "id": "idle",
+        "icon": "🏚️",
+        "title": "Api membakar lahan “tanggung”",
+        "simple": "Kebanyakan kebakaran tidak terjadi di hutan atau di kebun — tetapi di lahan yang sudah dibuka dan dikeringkan, menunggu ditanami.",
+        "num": "76%",
+        "numLabel": "area terbakar pada 2019 (tujuh provinsi) adalah lahan terlantar",
+        "more": "Hanya 3% lahan terbakar berada di dalam kebun sawit dan 0,4% di kebun akasia, karet, atau sawah. Api yang dinyalakan di kebun mudah menjalar ke lahan terlantar kering di sekitarnya."
+      },
+      {
+        "id": "riau",
+        "icon": "📊",
+        "title": "Kebakaran Riau 2013 dalam satu batang",
+        "simple": "Sebagian besar lahan yang terbakar sudah kehilangan hutannya.",
+        "visual": "riau",
+        "num": "163.336 ha",
+        "numLabel": "terbakar dalam sepekan pada Juni 2013, 84% di lahan gambut",
+        "more": "Dari lahan gundul yang terbakar, 57% berupa semak dan tanah terbuka, 31% sawit muda, dan 7% sawit tua. Kebakaran terjadi pada tahun yang lebih basah dari biasanya, setelah hanya dua bulan kering."
+      },
+      {
+        "id": "tusam",
+        "icon": "🌲",
+        "title": "Pinus yang melintasi khatulistiwa",
+        "simple": "Pinus Sumatra (tusam) adalah pinus asli Indonesia — dan seperti pinus Türkiye, daun jarumnya yang bergetah terbakar panas.",
+        "more": "Banyak ditanam di Jawa dan Sulawesi. Satu penelitian menduga lubang sadapan getah dan ukuran pohon dapat memengaruhi intensitas api."
+      },
+      {
+        "id": "east",
+        "icon": "🌾",
+        "title": "2026: api bergeser ke timur yang kering",
+        "simple": "Sabana kering di Nusa Tenggara banyak terbakar tahun ini.",
+        "num": "178.232 ha",
+        "numLabel": "terbakar di Indonesia Januari–Juni 2026 — Bali & Nusa Tenggara 18,7%",
+        "more": "Sabana adalah tutupan yang paling banyak terbakar di Nusa Tenggara. Di hutan Mutis, petak yang terbakar didominasi Eucalyptus urophylla yang tahan api."
+      },
+      {
+        "id": "gelam",
+        "icon": "🌳",
+        "title": "Terlalu sering terbakar, hutan pun berubah",
+        "simple": "Kebakaran berulang mengubah hutan rawa yang tinggi menjadi semak gelam dan padang rumput.",
+        "more": "Gelam (Melaleuca cajuputi) bertahan dari api, jadi setelah kebakaran berulang ia mendominasi — dan hutan rawa aslinya tidak kembali."
+      },
+      {
+        "id": "alang",
+        "icon": "🌱",
+        "title": "Rumput yang membuat api tetap hidup",
+        "simple": "Alang-alang menguasai lahan bekas terbakar, lalu terbakar lagi dan lagi.",
+        "more": "Kebakaran berulang menghilangkan tumbuhan yang lebih tinggi dari alang-alang (Imperata cylindrica), sehingga rumput ini tetap berkuasa dan pohon tidak bisa kembali."
+      }
+    ]
+  }
+}

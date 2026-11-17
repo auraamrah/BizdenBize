@@ -1,0 +1,42 @@
+# Publishes the website (web/) to GitHub Pages.
+# The site's data is rebuilt from the committed model output on every deploy, so pushing a new
+# bizdenbize/dashboard/data.live.json (from 06_predict_live.py) is enough to update the live site.
+# One-time setup: Settings → Pages → Build and deployment → Source: "GitHub Actions".
+name: Deploy website
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "web/**"
+      - "bizdenbize/dashboard/data.live.json"
+      - "bizdenbize/dashboard/data.json"
+      - "bizdenbize/scripts/web_export.py"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v6
+      - name: Build website data from the model output
+        run: python3 bizdenbize/scripts/web_export.py
+      - uses: actions/configure-pages@v6
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: web
+      - id: deployment
+        uses: actions/deploy-pages@v5
