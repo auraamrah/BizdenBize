@@ -83,7 +83,8 @@ Key cell-level tables are stored in `data/turkiye/`: `cells.csv` (the land cells
 JUKUT/
 ├── bizdenbize/
 │   ├── scripts/        pipeline scripts 01–06, firebridge_core.py, firebridge_fwi.py
-│   └── dashboard/      index.html, app.js, data*.json (demo, pilot, hindcast, live)
+│   ├── dashboard/      index.html, app.js, data*.json (demo, pilot, hindcast, live)
+│   └── upload_verifier/ citizen photo/video verification: YOLO training notebook + FastAPI /verify (5 gates -> trust score)
 ├── api/                historical CEMS notebook
 ├── data/               raw and derived data (see section 3)
 ├── labels/             labels_pilot.csv (pilot labels)

@@ -1,0 +1,6 @@
+.venv/
+__pycache__/
+models/*.onnx
+data/calib/real/*
+data/calib/fake/*
+!data/calib/*/.gitkeep
